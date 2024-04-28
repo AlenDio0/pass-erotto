@@ -1,4 +1,5 @@
 #pragma once
+#include "StateMachine.h"
 #include <SFML\Graphics.hpp>
 
 namespace Data
@@ -9,7 +10,8 @@ namespace Data
 	static const unsigned int WINDOW_HEIGTH = 800;
 	static const sf::Uint32 WINDOW_STYLE = sf::Style::Close;
 
-	static sf::RenderWindow* window = NULL;
+	static sf::RenderWindow* s_Window = NULL;
+	static StateMachine s_Machine;
 
 	void INIT();
 };
