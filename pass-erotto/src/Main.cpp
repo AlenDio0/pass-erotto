@@ -1,9 +1,12 @@
 #include <SFML\Graphics.hpp>
+#include "Data.h"
 #include "Engine.h"
 
 int main()
 {
-	Engine::get().run(StateRef());
+	Data::INIT();
+
+	Engine::RUN(StateRef(), Data::s_Machine);
 
 	return 0;
 }
