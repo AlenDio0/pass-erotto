@@ -1,7 +1,10 @@
 #include <SFML\Graphics.hpp>
+#include "Engine.h"
 
 int main()
 {
+	Engine::get().run(StateRef());
+
 	sf::RenderWindow window(sf::VideoMode(600, 600), "Title");
 
 	sf::CircleShape circle(100.f);
