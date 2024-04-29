@@ -4,6 +4,8 @@
 #include <fstream>
 #include "Data.h"
 
+#include "TextBox.h"
+
 class PINState : public State
 {
 public:
@@ -16,7 +18,8 @@ private:
 	std::string m_EncryptedPIN;
 	std::string m_GuessPIN;
 
-	sf::Text m_TextPIN;
+	sf::Text m_TextInsertPIN;
+	TextBox m_TextBoxPIN;
 
 	bool loadPIN();
 };

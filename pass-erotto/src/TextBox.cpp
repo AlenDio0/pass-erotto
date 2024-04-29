@@ -16,6 +16,21 @@ TextBox::TextBox(sf::Font& font, const uint16_t& charSize, const sf::Color& colo
 	setPosition({ 0.f, 0.f });
 }
 
+sf::Text& TextBox::getText()
+{
+	return m_Text;
+}
+
+sf::RectangleShape& TextBox::getBackground()
+{
+	return m_Background;
+}
+
+const std::string& TextBox::getBuff() const
+{
+	return m_Buff.str();
+}
+
 void TextBox::setPosition(const sf::Vector2f& position)
 {
 	m_Background.setPosition(position);
@@ -55,7 +70,7 @@ bool TextBox::isCursorOn(const sf::WindowBase& window)
 	return m_Background.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window));
 }
 
-void TextBox::typedOn(sf::Event input)
+void TextBox::onType(sf::Event input)
 {
 	if (!m_IsSelected)
 	{
