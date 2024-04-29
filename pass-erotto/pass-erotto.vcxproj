@@ -140,6 +140,7 @@
     <ClCompile Include="src\PINState.cpp" />
     <ClCompile Include="src\Data.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\TextBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="src\PINState.h" />
     <ClInclude Include="src\Data.h" />
+    <ClInclude Include="src\TextBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
