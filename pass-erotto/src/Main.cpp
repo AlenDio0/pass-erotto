@@ -2,11 +2,13 @@
 #include "Data.h"
 #include "Engine.h"
 
+#include "PINState.h"
+
 int main()
 {
 	Data::INIT();
 
-	Engine::RUN(StateRef(), Data::s_Machine);
+	Engine::RUN(StateRef(new PINState()), Data::s_Machine);
 
 	return 0;
 }
