@@ -7,7 +7,7 @@ namespace Data
 	//TO DO: ini parser
 	static const std::string WINDOW_TITLE = "Pass-erotto";
 	static const unsigned int WINDOW_WIDTH = 400;
-	static const unsigned int WINDOW_HEIGTH = 800;
+	static const unsigned int WINDOW_HEIGTH = 600;
 	static const sf::Uint32 WINDOW_STYLE = sf::Style::Close;
 	static const unsigned int WINDOW_FPSLIMIT = 60;
 	static const bool WINDOW_VSYNC = false;
