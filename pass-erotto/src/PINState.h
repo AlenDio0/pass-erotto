@@ -18,6 +18,7 @@ private:
 	std::string m_EncryptedPIN;
 	std::string m_GuessPIN;
 
+	sf::Text m_TextInsertPIN;
 	TextBox m_TextBoxPIN;
 
 	bool loadPIN();

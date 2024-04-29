@@ -4,14 +4,22 @@ using namespace Data;
 
 PINState::PINState()
 {
+	rWindow->setTitle(WINDOW_TITLE + ": Inserire il PIN");
+
 	if (!loadPIN())
 	{
 		//CREATE PIN
 		m_EncryptedPIN = "0000";
 	}
 
+	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, 40u);
+	m_TextInsertPIN.setPosition({ 25.f, WINDOW_HEIGTH / 6.f });
+	m_TextInsertPIN.setStyle(sf::Text::Bold);
+	m_TextInsertPIN.setOutlineThickness(2.f);
+
 	m_TextBoxPIN = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 16u);
 	m_TextBoxPIN.setPosition({ 25.f, WINDOW_HEIGTH / 3.f });
+	m_TextBoxPIN.setPlaceHolder("PIN");
 }
 
 void PINState::pollEvent()
@@ -48,6 +56,8 @@ void PINState::update()
 void PINState::render()
 {
 	rWindow->clear(WINDOW_BACKGROUND);
+
+	rWindow->draw(m_TextInsertPIN);
 
 	m_TextBoxPIN.render(rWindow);
 
