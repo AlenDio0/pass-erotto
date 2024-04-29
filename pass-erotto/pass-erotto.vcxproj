@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\PINState.cpp" />
     <ClCompile Include="src\Data.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
@@ -142,6 +143,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\PINState.h" />
     <ClInclude Include="src\Data.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
