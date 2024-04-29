@@ -55,7 +55,7 @@ bool TextBox::isCursorOn(const sf::WindowBase& window)
 	return m_Background.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window));
 }
 
-void TextBox::typedOn(sf::Event input)
+void TextBox::onType(sf::Event input)
 {
 	if (!m_IsSelected)
 	{

@@ -15,7 +15,7 @@ public:
 
 	bool isCursorOn(const sf::WindowBase& window);
 
-	void typedOn(sf::Event input);
+	void onType(sf::Event input);
 
 	void update();
 
