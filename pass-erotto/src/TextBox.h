@@ -8,6 +8,10 @@ public:
 	TextBox() = default;
 	TextBox(sf::Font& font, const uint16_t& charSize, const sf::Color& color, const uint16_t& limit);
 
+	sf::Text& getText();
+	sf::RectangleShape& getBackground();
+	const std::string& getBuff() const;
+
 	void setPosition(const sf::Vector2f& position);
 	void setLimit(const uint16_t& limit);
 	void setPlaceHolder(const std::string& placeholder);
