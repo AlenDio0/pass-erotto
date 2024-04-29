@@ -10,26 +10,30 @@ PINState::PINState()
 		m_EncryptedPIN = "0000";
 	}
 
-	m_TextPIN.setFont(*WINDOW_FONT);
-	m_TextPIN.setPosition(50.f, 100.f);
-	m_TextPIN.setFillColor(sf::Color(100, 100, 100));
-	m_TextPIN.setCharacterSize(30u);
+	m_TextBoxPIN = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 16u);
+	m_TextBoxPIN.setPosition({ 25.f, WINDOW_HEIGTH / 3.f });
 }
 
 void PINState::pollEvent()
 {
-	sf::Event event;
-	while (rWindow->pollEvent(event))
+	for (sf::Event event; rWindow->pollEvent(event);)
 	{
 		switch (event.type)
 		{
 		case sf::Event::Closed:
 			rWindow->close();
 			break;
-		case sf::Event::KeyPressed:
-			if (sf::Keyboard::isKeyPressed(event.key.code))
+		case sf::Event::TextEntered:
+			m_TextBoxPIN.onType(event);
+			break;
+		case sf::Event::MouseButtonPressed:
+			if (m_TextBoxPIN.isCursorOn(*rWindow))
 			{
-				m_TextPIN.setString(m_TextPIN.getString() + (char)event.key.code);
+				m_TextBoxPIN.setSelected(true);
+			}
+			else
+			{
+				m_TextBoxPIN.setSelected(false);
 			}
 			break;
 		}
@@ -38,13 +42,14 @@ void PINState::pollEvent()
 
 void PINState::update()
 {
+	m_TextBoxPIN.update();
 }
 
 void PINState::render()
 {
 	rWindow->clear(WINDOW_BACKGROUND);
 
-	rWindow->draw(m_TextPIN);
+	m_TextBoxPIN.render(rWindow);
 
 	rWindow->display();
 }
