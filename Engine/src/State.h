@@ -3,8 +3,8 @@
 class State
 {
 public:
-	State();
-	virtual ~State();
+	State() = default;
+	virtual ~State() = default;
 
 	virtual void pollEvent() = 0;
 	virtual void update() = 0;
