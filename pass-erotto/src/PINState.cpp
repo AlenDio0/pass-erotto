@@ -18,18 +18,13 @@ PINState::PINState()
 
 void PINState::pollEvent()
 {
-	if (!s_Window)
-	{
-		return;
-	}
-
 	sf::Event event;
-	while (s_Window->pollEvent(event))
+	while (rWindow->pollEvent(event))
 	{
 		switch (event.type)
 		{
 		case sf::Event::Closed:
-			s_Window->close();
+			rWindow->close();
 			break;
 		case sf::Event::KeyPressed:
 			if (sf::Keyboard::isKeyPressed(event.key.code))
@@ -47,11 +42,11 @@ void PINState::update()
 
 void PINState::render()
 {
-	s_Window->clear(WINDOW_BACKGROUND);
+	rWindow->clear(WINDOW_BACKGROUND);
 
-	s_Window->draw(m_TextPIN);
+	rWindow->draw(m_TextPIN);
 
-	s_Window->display();
+	rWindow->display();
 }
 
 bool PINState::loadPIN()

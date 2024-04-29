@@ -7,9 +7,9 @@ namespace Data
 		WINDOW_FONT = new sf::Font();
 		WINDOW_FONT->loadFromFile("C:/Windows/Fonts/arial.ttf");
 
-		s_Window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGTH), WINDOW_TITLE, WINDOW_STYLE);
+		rWindow = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGTH), WINDOW_TITLE, WINDOW_STYLE);
 
-		s_Window->setFramerateLimit(WINDOW_FPSLIMIT);
-		s_Window->setVerticalSyncEnabled(WINDOW_VSYNC);
+		rWindow->setFramerateLimit(WINDOW_FPSLIMIT);
+		rWindow->setVerticalSyncEnabled(WINDOW_VSYNC);
 	}
 };

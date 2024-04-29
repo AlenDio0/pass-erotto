@@ -13,9 +13,9 @@ namespace Data
 	static const bool WINDOW_VSYNC = false;
 
 	static const sf::Color WINDOW_BACKGROUND(70, 100, 170);
-	static sf::Font* WINDOW_FONT = NULL;
+	inline sf::Font* WINDOW_FONT = NULL;
 
-	static sf::RenderWindow* s_Window = NULL;
+	inline sf::RenderWindow* rWindow = NULL;
 	static StateMachine s_Machine;
 
 	void INIT();
