@@ -22,6 +22,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="src\PINState.cpp">
+		<Filter>File di origine</Filter>
+	</ClInclude>
+    <ClCompile Include="src\TextBox.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -30,6 +33,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="src\PINState.h">
+		<Filter>File di intestazione</Filter>
+	</ClInclude>
+    <ClInclude Include="src\TextBox.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
