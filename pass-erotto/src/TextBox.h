@@ -10,7 +10,10 @@ public:
 
 	void setPosition(const sf::Vector2f& position);
 	void setLimit(const uint16_t& limit);
+	void setPlaceHolder(const std::string& placeholder);
 	void setSelected(const bool& selected);
+
+	bool isCursorOn(const sf::WindowBase& window);
 
 	void typedOn(sf::Event input);
 
@@ -19,8 +22,14 @@ public:
 	void render(sf::RenderWindow* target) const;
 private:
 	sf::Text m_Text;
+	sf::Color m_TextColor;
+
 	sf::RectangleShape m_Background;
+
 	std::ostringstream m_Buff;
+
+	std::string m_PlaceHolderStr;
+
 	bool m_IsSelected;
 	unsigned int m_Limit;
 
@@ -34,6 +43,8 @@ private:
 	};
 
 	bool isOverLimit() const;
+
+	void togglePlaceHolder(const bool& hide);
 
 	void inputLogic(const int& typedChar);
 };
