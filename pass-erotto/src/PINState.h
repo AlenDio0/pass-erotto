@@ -5,6 +5,7 @@
 #include "Data.h"
 
 #include "TextBox.h"
+#include "TextButton.h"
 
 class PINState : public State
 {
@@ -16,10 +17,11 @@ public:
 	void render();
 private:
 	std::string m_EncryptedPIN;
-	std::string m_GuessPIN;
 
 	sf::Text m_TextInsertPIN;
 	TextBox m_TextBoxPIN;
+
+	TextButton m_ButtonConfirm;
 
 	bool loadPIN();
 };
