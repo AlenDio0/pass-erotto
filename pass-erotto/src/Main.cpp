@@ -8,7 +8,7 @@ int main()
 {
 	Data::INIT();
 
-	Engine::RUN(StateRef(new PINState()), Data::s_Machine);
+	Engine::RUN(StateRef(new PINState()), Data::g_Machine);
 
 	return 0;
 }
