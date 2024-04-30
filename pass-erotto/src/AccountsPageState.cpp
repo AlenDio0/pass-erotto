@@ -4,6 +4,11 @@ using namespace Data;
 
 AccountsPageState::AccountsPageState()
 {
+	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, 50u);
+	m_TextTitle.setPosition(WINDOW_WIDTH / 2.f - m_TextTitle.getGlobalBounds().getSize().x / 2.f, 0.f);
+	m_TextTitle.setOutlineThickness(2.f);
+	m_TextTitle.setOutlineColor(sf::Color::Black);
+
 	m_Background = sf::RectangleShape({ WINDOW_WIDTH, 60.f });
 	m_Background.setFillColor(sf::Color::Blue);
 	m_Background.setOutlineThickness(4.f);
@@ -89,6 +94,8 @@ void AccountsPageState::render()
 	g_Window->clear(WINDOW_BACKGROUND);
 
 	g_Window->draw(m_Background);
+
+	g_Window->draw(m_TextTitle);
 
 	for (Account& acc : m_Accounts)
 	{

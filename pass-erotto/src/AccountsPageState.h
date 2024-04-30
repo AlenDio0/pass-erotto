@@ -18,6 +18,8 @@ public:
 	void update();
 	void render();
 private:
+	sf::Text m_TextTitle;
+
 	class Account
 	{
 	public:
