@@ -4,8 +4,6 @@ using namespace Data;
 
 AccountsPageState::AccountsPageState()
 {
-	g_Window->setTitle(WINDOW_TITLE + ": Accounts");
-
 	m_Background = sf::RectangleShape({ WINDOW_WIDTH, 60.f });
 	m_Background.setFillColor(sf::Color::Blue);
 	m_Background.setOutlineThickness(4.f);
@@ -19,6 +17,11 @@ AccountsPageState::AccountsPageState()
 
 	m_Accounts.push_back(Account("WWWWWWWWWWWWWWWW"));
 	m_Accounts[0].setPosition({ 10.f, m_Background.getSize().y + 10.f });
+}
+
+void AccountsPageState::init()
+{
+	g_Window->setTitle(WINDOW_TITLE + ": Accounts");
 }
 
 void AccountsPageState::pollEvent()
