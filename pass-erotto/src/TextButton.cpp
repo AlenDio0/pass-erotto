@@ -1,7 +1,7 @@
 #include "TextButton.h"
 
 TextButton::TextButton(sf::Font& font, const std::string& title, const uint16_t& charSize, const sf::Color& color)
-	: m_TextColor(color), m_Highlight(false)
+	: m_TextColor(color)
 {
 	m_Text.setFont(font);
 	m_Text.setString(title);
