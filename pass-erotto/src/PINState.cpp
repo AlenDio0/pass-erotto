@@ -20,6 +20,9 @@ PINState::PINState()
 	m_TextBoxPIN = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 16u);
 	m_TextBoxPIN.setPosition({ 25.f, WINDOW_HEIGTH / 3.f });
 	m_TextBoxPIN.setPlaceHolder("PIN");
+
+	m_ButtonConfirm = TextButton(*WINDOW_FONT, "Conferma", 20u, sf::Color::Black);
+	m_ButtonConfirm.setPosition({ WINDOW_WIDTH - 150.f, WINDOW_HEIGTH / 1.25f });
 }
 
 void PINState::pollEvent()
@@ -31,8 +34,15 @@ void PINState::pollEvent()
 		case sf::Event::Closed:
 			rWindow->close();
 			break;
-		case sf::Event::TextEntered:
-			m_TextBoxPIN.onType(event);
+		case sf::Event::MouseMoved:
+			if (m_ButtonConfirm.isCursorOn(*rWindow))
+			{
+				m_ButtonConfirm.setHighlight(true);
+			}
+			else
+			{
+				m_ButtonConfirm.setHighlight(false);
+			}
 			break;
 		case sf::Event::MouseButtonPressed:
 			if (m_TextBoxPIN.isCursorOn(*rWindow))
@@ -43,6 +53,21 @@ void PINState::pollEvent()
 			{
 				m_TextBoxPIN.setSelected(false);
 			}
+
+			if (m_ButtonConfirm.isCursorOn(*rWindow))
+			{
+				if (m_EncryptedPIN == m_TextBoxPIN.getBuff())
+				{
+					s_Machine.add(StateRef(), true);
+				}
+				else
+				{
+					//TODO: comparsa errore
+				}
+			}
+			break;
+		case sf::Event::TextEntered:
+			m_TextBoxPIN.onType(event);
 			break;
 		}
 	}
@@ -60,6 +85,8 @@ void PINState::render()
 	rWindow->draw(m_TextInsertPIN);
 
 	m_TextBoxPIN.render(rWindow);
+
+	m_ButtonConfirm.render(rWindow);
 
 	rWindow->display();
 }
