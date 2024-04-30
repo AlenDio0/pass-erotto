@@ -56,10 +56,13 @@ void MainMenuState::pollEvent()
 					switch (i)
 					{
 					case Button::ACCOUNTS:
+						s_Machine.add(StateRef(), false);
 						break;
 					case Button::IMPOSTAZIONI:
+						s_Machine.add(StateRef(), false);
 						break;
 					case Button::AIUTO:
+						s_Machine.add(StateRef(), false);
 						break;
 					case Button::ESCI:
 						rWindow->close();
