@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-void Engine::RUN(StateRef state, StateMachine& machine)
+void Engine::RUN(StateRef state, StateMachine& machine, sf::RenderWindow& window)
 {
 	const std::chrono::microseconds FRAME_DURATION(16667);
 	std::chrono::microseconds lag(0);
@@ -28,5 +28,5 @@ void Engine::RUN(StateRef state, StateMachine& machine)
 			if (FRAME_DURATION > lag)
 				machine.getCurrentState()->render();
 		}
-	} while (true);
+	} while (window.isOpen());
 }
