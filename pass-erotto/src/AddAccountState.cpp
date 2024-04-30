@@ -87,7 +87,15 @@ void AddAccountState::pollEvent()
 						const std::string& nomeutente = m_TextBoxes[Box::NOMEUTENTE].getBuff();
 						const std::string& password = m_TextBoxes[Box::PASSWORD].getBuff();
 
-						//TODO: Save data
+						mINI::INIStructure ini;
+						DATAFILE.read(ini);
+
+						ini[nome].set
+						({
+							{ "nome", nomeutente },
+							{ "pass", password }
+							});
+						DATAFILE.write(ini);
 					}
 					g_Machine.remove();
 					break;
