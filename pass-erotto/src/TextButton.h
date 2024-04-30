@@ -15,7 +15,7 @@ public:
 
 	const bool& isCursorOn(const sf::WindowBase& window);
 
-	void render(sf::RenderWindow* target) const;
+	void render(sf::RenderTarget* target) const;
 private:
 	sf::Text m_Text;
 	sf::Color m_TextColor;

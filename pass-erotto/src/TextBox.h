@@ -23,7 +23,7 @@ public:
 
 	void update();
 
-	void render(sf::RenderWindow* target) const;
+	void render(sf::RenderTarget* target) const;
 private:
 	sf::Text m_Text;
 	sf::Color m_TextColor;
