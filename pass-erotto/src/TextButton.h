@@ -5,7 +5,7 @@ class TextButton
 {
 public:
 	TextButton() = default;
-	TextButton(sf::Font& font, const std::string& title = "", const uint16_t& charSize, const sf::Color& color = sf::Color::Black);
+	TextButton(sf::Font& font, const std::string& title, const uint16_t& charSize, const sf::Color& color = sf::Color::Black);
 
 	sf::Text& getText();
 	sf::RectangleShape& getBackground();
