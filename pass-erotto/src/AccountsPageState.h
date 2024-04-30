@@ -19,6 +19,7 @@ public:
 	void render();
 private:
 	sf::Text m_TextTitle;
+	sf::RectangleShape m_Background;
 
 	class Account
 	{
@@ -50,6 +51,24 @@ private:
 		inline TextButton& getButtonDelete()
 		{
 			return m_ButtonDelete;
+		}
+
+		inline const std::string& getUsername() const
+		{
+			return m_Username;
+		}
+		inline const std::string& getPassword() const
+		{
+			return m_Password;
+		}
+
+		inline void setUsername(const std::string& username)
+		{
+			m_Username = username;
+		}
+		inline void setPassword(const std::string& password)
+		{
+			m_Password = password;
 		}
 
 		inline void setPosition(const sf::Vector2f& position)
@@ -91,6 +110,9 @@ private:
 		TextButton m_ButtonView;
 		TextButton m_ButtonModify;
 		TextButton m_ButtonDelete;
+
+		std::string m_Username;
+		std::string m_Password;
 	};
 	std::vector<Account> m_Accounts;
 
@@ -101,6 +123,6 @@ private:
 		RITORNA,
 	};
 
-	sf::RectangleShape m_Background;
+	void loadAccounts();
 };
 

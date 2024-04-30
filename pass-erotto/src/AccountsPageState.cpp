@@ -27,25 +27,7 @@ void AccountsPageState::init()
 {
 	g_Window->setTitle(WINDOW_TITLE + ": Accounts");
 
-	m_Accounts.clear();
-
-	mINI::INIStructure ini;
-	DATAFILE.read(ini);
-
-	for (auto const& it : ini)
-	{
-		auto const& section = it.first;
-		auto const& collection = it.second;
-
-		m_Accounts.push_back(Account(section));
-
-		/*for (auto const& it2 : collection)
-		{
-			auto const& key = it2.first;
-			auto const& value = it2.second;
-
-		}*/
-	}
+	loadAccounts();
 
 	for (uint16_t i = 0; i < m_Accounts.size(); i++)
 	{
@@ -132,4 +114,36 @@ void AccountsPageState::render()
 	}
 
 	g_Window->display();
+}
+
+void AccountsPageState::loadAccounts()
+{
+	m_Accounts.clear();
+
+	mINI::INIStructure ini;
+	DATAFILE.read(ini);
+
+	for (auto const& it : ini)
+	{
+		const std::string& section = it.first;
+		const auto& collection = it.second;
+
+		Account account(section);
+
+		for (const auto& it2 : collection)
+		{
+			const std::string& key = it2.first;
+			const std::string& value = it2.second;
+
+			if (key == "nome")
+			{
+				account.setUsername(value);
+			}
+			else if (key == "pass")
+			{
+				account.setPassword(value);
+			}
+		}
+		m_Accounts.push_back(account);
+	}
 }
