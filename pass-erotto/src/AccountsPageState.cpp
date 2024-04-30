@@ -21,14 +21,36 @@ AccountsPageState::AccountsPageState()
 
 	m_Buttons[Button::RITORNA] = TextButton(*WINDOW_FONT, " < ", 30u, sf::Color::Black);
 	m_Buttons[Button::RITORNA].setPosition({ 10.f, 10.f });
-
-	m_Accounts.push_back(Account("WWWWWWWWWWWWWWWW"));
-	m_Accounts[0].setPosition({ 10.f, m_Background.getSize().y + 10.f });
 }
 
 void AccountsPageState::init()
 {
 	g_Window->setTitle(WINDOW_TITLE + ": Accounts");
+
+	m_Accounts.clear();
+
+	mINI::INIStructure ini;
+	DATAFILE.read(ini);
+
+	for (auto const& it : ini)
+	{
+		auto const& section = it.first;
+		auto const& collection = it.second;
+
+		m_Accounts.push_back(Account(section));
+
+		/*for (auto const& it2 : collection)
+		{
+			auto const& key = it2.first;
+			auto const& value = it2.second;
+
+		}*/
+	}
+
+	for (uint16_t i = 0; i < m_Accounts.size(); i++)
+	{
+		m_Accounts[i].setPosition({ 10.f, m_Background.getSize().y + 10.f + 110.f * i });
+	}
 }
 
 void AccountsPageState::pollEvent()
