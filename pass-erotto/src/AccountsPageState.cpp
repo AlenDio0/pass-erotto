@@ -71,6 +71,7 @@ void AccountsPageState::pollEvent()
 
 			for (Account& acc : m_Accounts)
 			{
+				buttons.push_back(&acc.getButtonView());
 				buttons.push_back(&acc.getButtonModify());
 				buttons.push_back(&acc.getButtonDelete());
 			}
