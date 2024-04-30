@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AccountsPageState.cpp" />
     <ClCompile Include="src\MainMenuState.cpp" />
     <ClCompile Include="src\PINState.cpp" />
     <ClCompile Include="src\Data.cpp" />
@@ -150,6 +151,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AccountsPageState.h" />
     <ClInclude Include="src\MainMenuState.h" />
     <ClInclude Include="src\PINState.h" />
     <ClInclude Include="src\Data.h" />
