@@ -16,7 +16,7 @@ namespace Data
 	inline sf::Font* WINDOW_FONT = NULL;
 
 	inline sf::RenderWindow* rWindow = NULL;
-	static StateMachine s_Machine;
+	inline StateMachine s_Machine;
 
 	void INIT();
 };
