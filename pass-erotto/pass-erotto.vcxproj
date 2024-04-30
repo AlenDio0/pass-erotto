@@ -141,6 +141,7 @@
     <ClCompile Include="src\Data.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\TextBox.cpp" />
+    <ClCompile Include="src\TextButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
@@ -151,6 +152,7 @@
     <ClInclude Include="src\PINState.h" />
     <ClInclude Include="src\Data.h" />
     <ClInclude Include="src\TextBox.h" />
+    <ClInclude Include="src\TextButton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
