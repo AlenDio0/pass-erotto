@@ -82,8 +82,15 @@ void AddAccountState::pollEvent()
 					switch (i)
 					{
 					case Button::CONFERMA:
-						g_Machine.remove();
-						break;
+					{
+						const std::string& nome = m_TextBoxes[Box::NOME].getBuff();
+						const std::string& nomeutente = m_TextBoxes[Box::NOMEUTENTE].getBuff();
+						const std::string& password = m_TextBoxes[Box::PASSWORD].getBuff();
+
+						//TODO: Save data
+					}
+					g_Machine.remove();
+					break;
 					case Button::ANNULLA:
 						g_Machine.remove();
 						break;
