@@ -11,6 +11,8 @@ class MainMenuState : public State
 public:
 	MainMenuState();
 
+	void init();
+
 	void pollEvent();
 	void update();
 	void render();

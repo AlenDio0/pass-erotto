@@ -6,8 +6,6 @@ using namespace Data;
 
 PINState::PINState()
 {
-	g_Window->setTitle(WINDOW_TITLE + ": Inserire il PIN");
-
 	if (!loadPIN())
 	{
 		//CREATE PIN
@@ -25,6 +23,11 @@ PINState::PINState()
 
 	m_ButtonConfirm = TextButton(*WINDOW_FONT, "Conferma", 20u, sf::Color::Black);
 	m_ButtonConfirm.setPosition({ WINDOW_WIDTH - 150.f, WINDOW_HEIGTH / 1.25f });
+}
+
+void PINState::init()
+{
+	g_Window->setTitle(WINDOW_TITLE + ": Inserire il PIN");
 }
 
 void PINState::pollEvent()

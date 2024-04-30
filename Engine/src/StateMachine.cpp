@@ -36,6 +36,11 @@ void StateMachine::updateStateChanges()
 			m_States.pop();
 		}
 
+		if (!m_States.empty())
+		{
+			m_States.top()->init();
+		}
+
 		m_Removing = false;
 	}
 
@@ -52,6 +57,7 @@ void StateMachine::updateStateChanges()
 			}
 
 			m_States.push(std::move(m_NewState));
+			m_States.top()->init();
 		}
 
 		m_Adding = false;

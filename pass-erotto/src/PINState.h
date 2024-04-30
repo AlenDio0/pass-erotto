@@ -12,6 +12,8 @@ class PINState : public State
 public:
 	PINState();
 
+	void init();
+
 	void pollEvent();
 	void update();
 	void render();

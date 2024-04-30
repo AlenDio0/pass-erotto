@@ -6,8 +6,6 @@ using namespace Data;
 
 MainMenuState::MainMenuState()
 {
-	g_Window->setTitle(WINDOW_TITLE + ": MainMenu");
-
 	const uint16_t CHAR_SIZE = 30u;
 	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
 	const float Y_POS = 175.f, Y_SPACING = 100.f;
@@ -28,6 +26,12 @@ MainMenuState::MainMenuState()
 		m_Buttons[i].setPosition({ floor(X_AXISPOS - m_Buttons[i].getBackground().getSize().x / 2.f), floor(Y_POS + Y_SPACING * i) });
 	}
 }
+
+void MainMenuState::init()
+{
+	g_Window->setTitle(WINDOW_TITLE + ": MainMenu");
+}
+
 void MainMenuState::pollEvent()
 {
 	for (sf::Event event; g_Window->pollEvent(event);)

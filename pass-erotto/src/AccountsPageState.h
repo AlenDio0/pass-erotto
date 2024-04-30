@@ -12,6 +12,8 @@ class AccountsPageState : public State
 public:
 	AccountsPageState();
 
+	void init();
+
 	void pollEvent();
 	void update();
 	void render();
