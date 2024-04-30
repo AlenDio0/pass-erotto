@@ -10,7 +10,7 @@ public:
 
 	sf::Text& getText();
 	sf::RectangleShape& getBackground();
-	const std::string& getBuff() const;
+	const std::string getBuff() const;
 
 	void setPosition(const sf::Vector2f& position);
 	void setLimit(const uint16_t& limit);

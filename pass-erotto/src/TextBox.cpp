@@ -26,7 +26,7 @@ sf::RectangleShape& TextBox::getBackground()
 	return m_Background;
 }
 
-const std::string& TextBox::getBuff() const
+const std::string TextBox::getBuff() const
 {
 	return m_Buff.str();
 }
