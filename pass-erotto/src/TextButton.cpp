@@ -49,7 +49,7 @@ const bool& TextButton::isCursorOn(const sf::WindowBase& window)
 	return m_Background.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window));
 }
 
-void TextButton::render(sf::RenderWindow* target) const
+void TextButton::render(sf::RenderTarget* target) const
 {
 	target->draw(m_Background);
 	target->draw(m_Text);

@@ -33,6 +33,9 @@
     <ClCompile Include="src\MainMenuState.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="src\AccountsPageState.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Data.h">
@@ -48,6 +51,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="src\MainMenuState.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AccountsPageState.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

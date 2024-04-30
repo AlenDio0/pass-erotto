@@ -18,7 +18,6 @@ private:
 	sf::Text m_TextTitle;
 
 	std::unordered_map<uint8_t, TextButton> m_Buttons;
-
 	enum Button : uint8_t
 	{
 		ACCOUNTS,

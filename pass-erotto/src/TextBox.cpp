@@ -122,7 +122,7 @@ void TextBox::update()
 	}
 }
 
-void TextBox::render(sf::RenderWindow* target) const
+void TextBox::render(sf::RenderTarget* target) const
 {
 	target->draw(m_Background);
 	target->draw(m_Text);
