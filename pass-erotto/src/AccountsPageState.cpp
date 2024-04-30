@@ -1,5 +1,7 @@
 #include "AccountsPageState.h"
 
+#include "AddAccountState.h"
+
 using namespace Data;
 
 AccountsPageState::AccountsPageState()
@@ -72,7 +74,7 @@ void AccountsPageState::pollEvent()
 					switch (i)
 					{
 					case Button::AGGIUNGI:
-						g_Machine.add(StateRef(), false);
+						g_Machine.add(StateRef(new AddAccountState()), false);
 						break;
 					case Button::RITORNA:
 						g_Machine.remove();
@@ -101,9 +103,10 @@ void AccountsPageState::render()
 	{
 		acc.render(g_Window);
 	}
-
-	m_Buttons[Button::AGGIUNGI].render(g_Window);
-	m_Buttons[Button::RITORNA].render(g_Window);
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		m_Buttons[i].render(g_Window);
+	}
 
 	g_Window->display();
 }
