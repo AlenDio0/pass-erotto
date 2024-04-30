@@ -1,5 +1,7 @@
 #include "PINState.h"
 
+#include "MainMenuState.h"
+
 using namespace Data;
 
 PINState::PINState()
@@ -58,7 +60,7 @@ void PINState::pollEvent()
 			{
 				if (m_EncryptedPIN == m_TextBoxPIN.getBuff())
 				{
-					s_Machine.add(StateRef(), true);
+					s_Machine.add(StateRef(new MainMenuState()), true);
 				}
 				else
 				{
