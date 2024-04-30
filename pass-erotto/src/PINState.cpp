@@ -6,7 +6,7 @@ using namespace Data;
 
 PINState::PINState()
 {
-	rWindow->setTitle(WINDOW_TITLE + ": Inserire il PIN");
+	g_Window->setTitle(WINDOW_TITLE + ": Inserire il PIN");
 
 	if (!loadPIN())
 	{
@@ -29,15 +29,15 @@ PINState::PINState()
 
 void PINState::pollEvent()
 {
-	for (sf::Event event; rWindow->pollEvent(event);)
+	for (sf::Event event; g_Window->pollEvent(event);)
 	{
 		switch (event.type)
 		{
 		case sf::Event::Closed:
-			rWindow->close();
+			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
-			if (m_ButtonConfirm.isCursorOn(*rWindow))
+			if (m_ButtonConfirm.isCursorOn(*g_Window))
 			{
 				m_ButtonConfirm.setHighlight(true);
 			}
@@ -47,7 +47,7 @@ void PINState::pollEvent()
 			}
 			break;
 		case sf::Event::MouseButtonPressed:
-			if (m_TextBoxPIN.isCursorOn(*rWindow))
+			if (m_TextBoxPIN.isCursorOn(*g_Window))
 			{
 				m_TextBoxPIN.setSelected(true);
 			}
@@ -56,11 +56,11 @@ void PINState::pollEvent()
 				m_TextBoxPIN.setSelected(false);
 			}
 
-			if (m_ButtonConfirm.isCursorOn(*rWindow))
+			if (m_ButtonConfirm.isCursorOn(*g_Window))
 			{
 				if (m_EncryptedPIN == m_TextBoxPIN.getBuff())
 				{
-					s_Machine.add(StateRef(new MainMenuState()), true);
+					g_Machine.add(StateRef(new MainMenuState()), true);
 				}
 				else
 				{
@@ -82,15 +82,15 @@ void PINState::update()
 
 void PINState::render()
 {
-	rWindow->clear(WINDOW_BACKGROUND);
+	g_Window->clear(WINDOW_BACKGROUND);
 
-	rWindow->draw(m_TextInsertPIN);
+	g_Window->draw(m_TextInsertPIN);
 
-	m_TextBoxPIN.render(rWindow);
+	m_TextBoxPIN.render(g_Window);
 
-	m_ButtonConfirm.render(rWindow);
+	m_ButtonConfirm.render(g_Window);
 
-	rWindow->display();
+	g_Window->display();
 }
 
 bool PINState::loadPIN()

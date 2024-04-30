@@ -15,8 +15,8 @@ namespace Data
 	static const sf::Color WINDOW_BACKGROUND(70, 100, 170);
 	inline sf::Font* WINDOW_FONT = NULL;
 
-	inline sf::RenderWindow* rWindow = NULL;
-	inline StateMachine s_Machine;
+	inline sf::RenderWindow* g_Window = NULL;
+	inline StateMachine g_Machine;
 
 	void INIT();
 };

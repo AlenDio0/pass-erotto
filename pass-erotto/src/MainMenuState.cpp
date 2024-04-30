@@ -4,7 +4,7 @@ using namespace Data;
 
 MainMenuState::MainMenuState()
 {
-	rWindow->setTitle(WINDOW_TITLE + ": MainMenu");
+	g_Window->setTitle(WINDOW_TITLE + ": MainMenu");
 
 	const uint16_t CHAR_SIZE = 30u;
 	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
@@ -28,17 +28,17 @@ MainMenuState::MainMenuState()
 }
 void MainMenuState::pollEvent()
 {
-	for (sf::Event event; rWindow->pollEvent(event);)
+	for (sf::Event event; g_Window->pollEvent(event);)
 	{
 		switch (event.type)
 		{
 		case sf::Event::Closed:
-			rWindow->close();
+			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
 			for (uint8_t i = 0; i < m_Buttons.size(); i++)
 			{
-				if (m_Buttons[i].isCursorOn(*rWindow))
+				if (m_Buttons[i].isCursorOn(*g_Window))
 				{
 					m_Buttons[i].setHighlight(true);
 				}
@@ -51,21 +51,21 @@ void MainMenuState::pollEvent()
 		case sf::Event::MouseButtonPressed:
 			for (uint8_t i = 0; i < m_Buttons.size(); i++)
 			{
-				if (m_Buttons[i].isCursorOn(*rWindow))
+				if (m_Buttons[i].isCursorOn(*g_Window))
 				{
 					switch (i)
 					{
 					case Button::ACCOUNTS:
-						s_Machine.add(StateRef(), false);
+						g_Machine.add(StateRef(), false);
 						break;
 					case Button::IMPOSTAZIONI:
-						s_Machine.add(StateRef(), false);
+						g_Machine.add(StateRef(), false);
 						break;
 					case Button::AIUTO:
-						s_Machine.add(StateRef(), false);
+						g_Machine.add(StateRef(), false);
 						break;
 					case Button::ESCI:
-						rWindow->close();
+						g_Window->close();
 						break;
 					}
 				}
@@ -81,14 +81,14 @@ void MainMenuState::update()
 
 void MainMenuState::render()
 {
-	rWindow->clear(WINDOW_BACKGROUND);
+	g_Window->clear(WINDOW_BACKGROUND);
 
-	rWindow->draw(m_TextTitle);
+	g_Window->draw(m_TextTitle);
 
 	for (uint8_t i = 0; i < m_Buttons.size(); i++)
 	{
-		m_Buttons[i].render(rWindow);
+		m_Buttons[i].render(g_Window);
 	}
 
-	rWindow->display();
+	g_Window->display();
 }
