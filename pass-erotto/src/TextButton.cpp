@@ -15,7 +15,9 @@ TextButton::TextButton(sf::Font& font, const std::string& title, const uint16_t&
 	m_Background.setFillColor(sf::Color::White);
 
 	m_HighlightShape.setSize(m_Background.getSize());
-	m_HighlightShape.setFillColor(sf::Color(128, 128, 128, 64));
+	m_HighlightShape.setOutlineThickness(2.f);
+	m_HighlightShape.setOutlineColor(sf::Color::White);
+	m_HighlightShape.setFillColor(sf::Color(128, 128, 128, 96));
 
 	setPosition({ 0.f, 0.f });
 }
@@ -42,7 +44,7 @@ void TextButton::setHighlight(const bool& highlight)
 	m_Highlight = highlight;
 }
 
-bool TextButton::isCursorOn(const sf::WindowBase& window)
+const bool& TextButton::isCursorOn(const sf::WindowBase& window)
 {
 	return m_Background.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window));
 }
