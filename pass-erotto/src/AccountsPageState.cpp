@@ -49,7 +49,7 @@ void AccountsPageState::pollEvent()
 		{
 			if (m_NotifyViewAccount.isActive())
 			{
-				TextButton& button = m_NotifyViewAccount.getButtonOk();
+				TextButton& button = m_NotifyViewAccount.getButtons()[Notify_ViewAccount::OK];
 
 				if (button.isCursorOn(*g_Window))
 				{
@@ -58,6 +58,26 @@ void AccountsPageState::pollEvent()
 				else
 				{
 					button.setHighlight(false);
+				}
+
+				break;
+			}
+
+			if (m_NotifyDeleteAccount.isActive())
+			{
+				auto& buttons = m_NotifyDeleteAccount.getButtons();
+
+				for (uint8_t i = 0; i < buttons.size(); i++)
+				{
+					TextButton& button = buttons[i];
+					if (button.isCursorOn(*g_Window))
+					{
+						button.setHighlight(true);
+					}
+					else
+					{
+						button.setHighlight(false);
+					}
 				}
 
 				break;
@@ -91,9 +111,42 @@ void AccountsPageState::pollEvent()
 		case sf::Event::MouseButtonPressed:
 			if (m_NotifyViewAccount.isActive())
 			{
-				if (m_NotifyViewAccount.getButtonOk().isCursorOn(*g_Window))
+				if (m_NotifyViewAccount.getButtons()[Notify_ViewAccount::OK].isCursorOn(*g_Window))
 				{
 					m_NotifyViewAccount.setActive(false);
+				}
+
+				break;
+			}
+
+			if (m_NotifyDeleteAccount.isActive())
+			{
+				auto& buttons = m_NotifyDeleteAccount.getButtons();
+
+				for (uint8_t i = 0; i < buttons.size(); i++)
+				{
+					if (buttons[i].isCursorOn(*g_Window))
+					{
+						switch (i)
+						{
+						case Notify_DeleteAccount::CONFERMA:
+						{
+							mINI::INIStructure ini;
+							DATAFILE.read(ini);
+
+							ini.remove(m_NotifyDeleteAccount.getName());
+
+							DATAFILE.write(ini);
+
+							init();
+						}
+						break;
+						case Notify_DeleteAccount::ANNULLA:
+							break;
+						}
+
+						m_NotifyDeleteAccount.setActive(false);
+					}
 				}
 
 				break;
@@ -135,7 +188,18 @@ void AccountsPageState::pollEvent()
 							g_Machine.add(StateRef(new EditAccountState(acc.getAccountInfo())), false);
 							break;
 						case ELIMINA:
-							break;
+						{
+							m_NotifyDeleteAccount = Notify_DeleteAccount(*WINDOW_FONT, { 350.f, 200.f }, "Sei Sicuro?", acc.getAccountInfo().name);
+							m_NotifyDeleteAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
+
+							std::stringstream contents;
+							contents << "\nStai per eliminare:\n" << acc.getAccountInfo().name
+								<< "\n\n\n(!) Questa operazione è irreversibile.";
+							m_NotifyDeleteAccount.setContents(contents.str());
+
+							m_NotifyDeleteAccount.setActive(true);
+						}
+						break;
 						}
 					}
 				}
@@ -185,6 +249,11 @@ void AccountsPageState::render()
 	if (m_NotifyViewAccount.isActive())
 	{
 		m_NotifyViewAccount.render(g_Window);
+	}
+
+	if (m_NotifyDeleteAccount.isActive())
+	{
+		m_NotifyDeleteAccount.render(g_Window);
 	}
 
 	g_Window->display();
