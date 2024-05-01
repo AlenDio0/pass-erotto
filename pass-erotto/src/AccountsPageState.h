@@ -135,16 +135,78 @@ private:
 			m_TextHeader.setStyle(sf::Text::Bold);
 
 			m_TextContents.setCharacterSize(15u);
+
+			m_Buttons[Button::OK] = TextButton(*Data::WINDOW_FONT, "Ok", 20u);
+
+			setPosition({ 0, 0 });
 		}
+
+		enum Button : uint8_t
+		{
+			OK,
+		};
 
 		inline void setPosition(const sf::Vector2f& position) override
 		{
 			setInPosition(position);
+
+			m_Buttons[Button::OK].setPosition
+			({ position.x + m_Background.getSize().x - m_Buttons[Button::OK].getBackground().getSize().x - 10.f,
+				position.y + m_Background.getSize().y - m_Buttons[Button::OK].getBackground().getSize().y - 10.f
+				});
 		}
 	private:
 
 	};
 	Notify_ViewAccount m_NotifyViewAccount;
+
+	class Notify_DeleteAccount : public Notify
+	{
+	public:
+		Notify_DeleteAccount() = default;
+		inline Notify_DeleteAccount(sf::Font& font, const sf::Vector2f& size, const std::string& header, const std::string& accname)
+			: Notify(font, size, header), m_AccountName(accname)
+		{
+			m_TextHeader.setCharacterSize(25u);
+			m_TextHeader.setStyle(sf::Text::Bold);
+
+			m_TextContents.setCharacterSize(15u);
+
+			m_Buttons[Button::CONFERMA] = TextButton(*Data::WINDOW_FONT, "Conferma", 20u);
+			m_Buttons[Button::ANNULLA] = TextButton(*Data::WINDOW_FONT, "Annulla", 20u);
+
+			setPosition({ 0, 0 });
+		}
+
+		enum Button : uint8_t
+		{
+			CONFERMA,
+			ANNULLA,
+		};
+
+		const std::string& getName() const
+		{
+			return m_AccountName;
+		}
+
+		inline void setPosition(const sf::Vector2f& position) override
+		{
+			setInPosition(position);
+
+			m_Buttons[Button::CONFERMA].setPosition
+			({ position.x + m_Background.getSize().x - m_Buttons[Button::CONFERMA].getBackground().getSize().x - 10.f,
+				position.y + m_Background.getSize().y - m_Buttons[Button::CONFERMA].getBackground().getSize().y - 10.f
+				});
+
+			m_Buttons[Button::ANNULLA].setPosition
+			({ position.x + m_Buttons[Button::ANNULLA].getBackground().getSize().x + 10.f,
+				position.y + m_Background.getSize().y - m_Buttons[Button::ANNULLA].getBackground().getSize().y - 10.f
+				});
+		}
+	private:
+		std::string m_AccountName;
+	};
+	Notify_DeleteAccount m_NotifyDeleteAccount;
 
 	void loadAccounts();
 };
