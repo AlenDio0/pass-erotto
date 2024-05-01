@@ -94,7 +94,7 @@ void TextBox::onType(sf::Event input)
 
 void TextBox::update()
 {
-	if (!m_IsSelected)
+	if (!m_IsSelected || isOverLimit())
 	{
 		return;
 	}
