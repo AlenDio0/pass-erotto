@@ -68,5 +68,8 @@
     <ClInclude Include="src\Notify.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="src\AccountInfo.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
