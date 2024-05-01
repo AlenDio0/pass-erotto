@@ -4,21 +4,27 @@ using namespace Data;
 
 AddAccountState::AddAccountState()
 {
-	const uint8_t CHAR_SIZE = 20u;
-	const float X_POS = 10.f, Y_POS = 75.f, Y_SPACING = 100.f;
+	const uint8_t CHAR_SIZE1 = 25u, CHAR_SIZE2 = 20u;
+	const float X_POS = 25.f, Y_POS = 125.f;
+	const float Y_SPACING = 100.f;
 
-	m_TextBoxes[Box::NOME] = TextBox(*WINDOW_FONT, CHAR_SIZE, sf::Color::Black, 16u);
+	m_Texts[Box::NOME] = sf::Text("Nome:", *WINDOW_FONT, CHAR_SIZE1);
+	m_TextBoxes[Box::NOME] = TextBox(*WINDOW_FONT, CHAR_SIZE2, sf::Color::Black, 16u);
 	m_TextBoxes[Box::NOME].setPlaceHolder("Nome (Gmail Lavoro, ...)");
 
-	m_TextBoxes[Box::NOMEUTENTE] = TextBox(*WINDOW_FONT, CHAR_SIZE, sf::Color::Black, 16u);
+	m_Texts[Box::NOMEUTENTE] = sf::Text("Nome utente:", *WINDOW_FONT, CHAR_SIZE1);
+	m_TextBoxes[Box::NOMEUTENTE] = TextBox(*WINDOW_FONT, CHAR_SIZE2, sf::Color::Black, 16u);
 	m_TextBoxes[Box::NOMEUTENTE].setPlaceHolder("Nome utente (nome@gmail, ...)");
 
-	m_TextBoxes[Box::PASSWORD] = TextBox(*WINDOW_FONT, CHAR_SIZE, sf::Color::Black, 16u);
+	m_Texts[Box::PASSWORD] = sf::Text("Password:", *WINDOW_FONT, CHAR_SIZE1);
+	m_TextBoxes[Box::PASSWORD] = TextBox(*WINDOW_FONT, CHAR_SIZE2, sf::Color::Black, 16u);
 	m_TextBoxes[Box::PASSWORD].setPlaceHolder("Password");
 
 	for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
 	{
 		m_TextBoxes[i].setPosition({ X_POS, Y_POS + Y_SPACING * i });
+		m_Texts[i].setPosition({ X_POS, Y_POS + Y_SPACING * i - m_TextBoxes[i].getBackground().getGlobalBounds().getSize().y });
+		m_Texts[i].setOutlineThickness(2.f);
 	}
 
 	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", 30u);
@@ -130,6 +136,7 @@ void AddAccountState::render()
 
 	for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
 	{
+		g_Window->draw(m_Texts[i]);
 		m_TextBoxes[i].render(g_Window);
 	}
 

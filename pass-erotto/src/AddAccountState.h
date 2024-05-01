@@ -18,6 +18,7 @@ public:
 	void update();
 	void render();
 private:
+	std::unordered_map<uint8_t, sf::Text> m_Texts;
 	std::unordered_map<uint8_t, TextBox> m_TextBoxes;
 	enum Box : uint8_t
 	{
