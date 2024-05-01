@@ -1,6 +1,7 @@
 #include "AccountsPageState.h"
 
 #include "AddAccountState.h"
+#include "EditAccountState.h"
 
 using namespace Data;
 
@@ -46,6 +47,42 @@ void AccountsPageState::pollEvent()
 			break;
 		case sf::Event::MouseMoved:
 		{
+			if (m_NotifyViewAccount.isActive())
+			{
+				TextButton& button = m_NotifyViewAccount.getButtons()[Notify_ViewAccount::OK];
+
+				if (button.isCursorOn(*g_Window))
+				{
+					button.setHighlight(true);
+				}
+				else
+				{
+					button.setHighlight(false);
+				}
+
+				break;
+			}
+
+			if (m_NotifyDeleteAccount.isActive())
+			{
+				auto& buttons = m_NotifyDeleteAccount.getButtons();
+
+				for (uint8_t i = 0; i < buttons.size(); i++)
+				{
+					TextButton& button = buttons[i];
+					if (button.isCursorOn(*g_Window))
+					{
+						button.setHighlight(true);
+					}
+					else
+					{
+						button.setHighlight(false);
+					}
+				}
+
+				break;
+			}
+
 			std::vector<TextButton*> buttons;
 
 			buttons.push_back(&m_Buttons[Button::AGGIUNGI]);
@@ -54,7 +91,7 @@ void AccountsPageState::pollEvent()
 			for (Account& acc : m_Accounts)
 			{
 				buttons.push_back(&acc.getButtonView());
-				buttons.push_back(&acc.getButtonModify());
+				buttons.push_back(&acc.getButtonEdit());
 				buttons.push_back(&acc.getButtonDelete());
 			}
 
@@ -72,6 +109,102 @@ void AccountsPageState::pollEvent()
 		}
 		break;
 		case sf::Event::MouseButtonPressed:
+			if (m_NotifyViewAccount.isActive())
+			{
+				if (m_NotifyViewAccount.getButtons()[Notify_ViewAccount::OK].isCursorOn(*g_Window))
+				{
+					m_NotifyViewAccount.setActive(false);
+				}
+
+				break;
+			}
+
+			if (m_NotifyDeleteAccount.isActive())
+			{
+				auto& buttons = m_NotifyDeleteAccount.getButtons();
+
+				for (uint8_t i = 0; i < buttons.size(); i++)
+				{
+					if (buttons[i].isCursorOn(*g_Window))
+					{
+						switch (i)
+						{
+						case Notify_DeleteAccount::CONFERMA:
+						{
+							mINI::INIStructure ini;
+							DATAFILE.read(ini);
+
+							ini.remove(m_NotifyDeleteAccount.getName());
+
+							DATAFILE.write(ini);
+
+							init();
+						}
+						break;
+						case Notify_DeleteAccount::ANNULLA:
+							break;
+						}
+
+						m_NotifyDeleteAccount.setActive(false);
+					}
+				}
+
+				break;
+			}
+
+			for (Account& acc : m_Accounts)
+			{
+				enum : uint8_t
+				{
+					MOSTRA,
+					MODIFICA,
+					ELIMINA,
+				};
+				std::unordered_map<uint8_t, TextButton*> buttons;
+
+				buttons[MOSTRA] = &acc.getButtonView();
+				buttons[MODIFICA] = &acc.getButtonEdit();
+				buttons[ELIMINA] = &acc.getButtonDelete();
+
+				for (uint8_t i = 0; i < buttons.size(); i++)
+				{
+					if (buttons[i]->isCursorOn(*g_Window))
+					{
+						switch (i)
+						{
+						case MOSTRA:
+						{
+							m_NotifyViewAccount = Notify_ViewAccount(*WINDOW_FONT, { 350.f, 200.f }, "Account: " + acc.getAccountInfo().name);
+							m_NotifyViewAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
+
+							std::stringstream contents;
+							contents << "Username:\n" << acc.getAccountInfo().username << "\n\nPassword:\n" << acc.getAccountInfo().password;
+							m_NotifyViewAccount.setContents(contents.str());
+
+							m_NotifyViewAccount.setActive(true);
+						}
+						break;
+						case MODIFICA:
+							g_Machine.add(StateRef(new EditAccountState(acc.getAccountInfo())), false);
+							break;
+						case ELIMINA:
+						{
+							m_NotifyDeleteAccount = Notify_DeleteAccount(*WINDOW_FONT, { 350.f, 200.f }, "Sei Sicuro?", acc.getAccountInfo().name);
+							m_NotifyDeleteAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
+
+							std::stringstream contents;
+							contents << "\nStai per eliminare:\n" << acc.getAccountInfo().name
+								<< "\n\n\n(!) Questa operazione è irreversibile.";
+							m_NotifyDeleteAccount.setContents(contents.str());
+
+							m_NotifyDeleteAccount.setActive(true);
+						}
+						break;
+						}
+					}
+				}
+			}
+
 			for (uint8_t i = 0; i < m_Buttons.size(); i++)
 			{
 				if (m_Buttons[i].isCursorOn(*g_Window))
@@ -113,6 +246,16 @@ void AccountsPageState::render()
 		m_Buttons[i].render(g_Window);
 	}
 
+	if (m_NotifyViewAccount.isActive())
+	{
+		m_NotifyViewAccount.render(g_Window);
+	}
+
+	if (m_NotifyDeleteAccount.isActive())
+	{
+		m_NotifyDeleteAccount.render(g_Window);
+	}
+
 	g_Window->display();
 }
 
@@ -128,7 +271,8 @@ void AccountsPageState::loadAccounts()
 		const std::string& section = it.first;
 		const auto& collection = it.second;
 
-		Account account(section);
+		Account account;
+		account.setName(section);
 
 		for (const auto& it2 : collection)
 		{

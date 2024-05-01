@@ -13,7 +13,7 @@ public:
 	void setPosition(const sf::Vector2f& position);
 	void setHighlight(const bool& highlight);
 
-	const bool& isCursorOn(const sf::WindowBase& window);
+	const bool& isCursorOn(const sf::WindowBase& window) const;
 
 	void render(sf::RenderTarget* target) const;
 private:
