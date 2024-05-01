@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Notify.cpp" />
     <ClCompile Include="src\AddAccountState.cpp" />
     <ClCompile Include="src\AccountsPageState.cpp" />
     <ClCompile Include="src\MainMenuState.cpp" />
@@ -154,6 +155,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Notify.h" />
     <ClInclude Include="src\AddAccountState.h" />
     <ClInclude Include="src\AccountsPageState.h" />
     <ClInclude Include="src\MainMenuState.h" />
