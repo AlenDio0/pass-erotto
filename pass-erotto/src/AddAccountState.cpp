@@ -5,7 +5,7 @@ using namespace Data;
 AddAccountState::AddAccountState()
 {
 	const uint8_t CHAR_SIZE1 = 25u, CHAR_SIZE2 = 20u;
-	const float X_POS = 25.f, Y_POS = 125.f;
+	const float X_AXISPOS = WINDOW_WIDTH / 2.f, Y_POS = 125.f;
 	const float Y_SPACING = 100.f;
 
 	m_Texts[Box::NOME] = sf::Text("Nome:", *WINDOW_FONT, CHAR_SIZE1);
@@ -13,8 +13,8 @@ AddAccountState::AddAccountState()
 	m_TextBoxes[Box::NOME].setPlaceHolder("Nome (Gmail Lavoro, ...)");
 
 	m_Texts[Box::NOMEUTENTE] = sf::Text("Nome utente:", *WINDOW_FONT, CHAR_SIZE1);
-	m_TextBoxes[Box::NOMEUTENTE] = TextBox(*WINDOW_FONT, CHAR_SIZE2, sf::Color::Black, 16u);
-	m_TextBoxes[Box::NOMEUTENTE].setPlaceHolder("Nome utente (nome@gmail, ...)");
+	m_TextBoxes[Box::NOMEUTENTE] = TextBox(*WINDOW_FONT, CHAR_SIZE2 - 2u, sf::Color::Black, 20u);
+	m_TextBoxes[Box::NOMEUTENTE].setPlaceHolder("Nome utente (nome@gmail.com, ...)");
 
 	m_Texts[Box::PASSWORD] = sf::Text("Password:", *WINDOW_FONT, CHAR_SIZE1);
 	m_TextBoxes[Box::PASSWORD] = TextBox(*WINDOW_FONT, CHAR_SIZE2, sf::Color::Black, 16u);
@@ -22,21 +22,21 @@ AddAccountState::AddAccountState()
 
 	for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
 	{
-		m_TextBoxes[i].setPosition({ X_POS, Y_POS + Y_SPACING * i });
-		m_Texts[i].setPosition({ X_POS, Y_POS + Y_SPACING * i - m_TextBoxes[i].getBackground().getGlobalBounds().getSize().y });
+		m_TextBoxes[i].setPosition({ X_AXISPOS - m_TextBoxes[i].getBackground().getSize().x / 2.f, Y_POS + Y_SPACING * i });
+		m_Texts[i].setPosition({ X_AXISPOS - m_Texts[i].getGlobalBounds().getSize().x / 2.f, Y_POS + Y_SPACING * i - m_TextBoxes[i].getBackground().getGlobalBounds().getSize().y });
 		m_Texts[i].setOutlineThickness(2.f);
 	}
 
 	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", 30u);
 	m_Buttons[Button::CONFERMA].setPosition
 	({
-		WINDOW_WIDTH - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().x - 50.f,
+		X_AXISPOS * 1.5f - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().x / 2.f,
 		WINDOW_HEIGTH - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().y - 50.f
 		});
 	m_Buttons[Button::ANNULLA] = TextButton(*WINDOW_FONT, "Annulla", 30u);
 	m_Buttons[Button::ANNULLA].setPosition
 	({
-		50.f,
+		X_AXISPOS / 2.f - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().x / 2.f,
 		WINDOW_HEIGTH - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().y - 50.f
 		});
 }
