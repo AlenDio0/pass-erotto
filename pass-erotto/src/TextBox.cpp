@@ -1,13 +1,13 @@
 #include "TextBox.h"
 
-TextBox::TextBox(sf::Font& font, const uint16_t& charSize, const sf::Color& color, const uint16_t& limit)
-	: m_Limit(limit != 0 ? limit : 16u), m_TextColor(color), m_IsSelected(false)
+TextBox::TextBox(sf::Font& font, const uint16_t& charSize, const sf::Color& color, const uint16_t& size)
+	: m_Size(size != 0 ? size : 16u), m_TextColor(color), m_IsSelected(false)
 {
 	m_Text.setFont(font);
 	m_Text.setCharacterSize(charSize);
 	m_Text.setFillColor(m_TextColor);
 
-	m_Background.setSize({ (float)(charSize * m_Limit) + 10.f, (float)(charSize * 1.5f) });
+	m_Background.setSize({ (float)(charSize * m_Size) + 10.f, (float)(charSize * 1.5f) });
 
 	m_Background.setOutlineThickness(2.f);
 	m_Background.setOutlineColor(sf::Color(100, 100, 100));
@@ -35,11 +35,6 @@ void TextBox::setPosition(const sf::Vector2f& position)
 {
 	m_Background.setPosition(position);
 	m_Text.setPosition(position.x + 5.f, position.y);
-}
-
-void TextBox::setLimit(const uint16_t& limit)
-{
-	m_Limit = limit;
 }
 
 void TextBox::setPlaceHolder(const std::string& placeholder)
@@ -130,7 +125,12 @@ void TextBox::render(sf::RenderTarget* target) const
 
 bool TextBox::isOverLimit() const
 {
-	return m_Limit != 0 && m_Buff.str().length() >= m_Limit;
+	if (m_Text.findCharacterPos(m_Buff.str().length()).x < m_Background.getPosition().x + m_Background.getSize().x - 10.f)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void TextBox::togglePlaceHolder(const bool& hide)
