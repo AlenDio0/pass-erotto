@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include "AccountInfo.h"
 #include "TextButton.h"
 #include "Notify.h"
 
@@ -25,10 +26,9 @@ private:
 	class Account
 	{
 	public:
-		Account() = default;
-		inline Account(const std::string& name)
+		inline Account()
 		{
-			m_TextName = sf::Text(name, *Data::WINDOW_FONT, 18u);
+			m_TextName = sf::Text("", *Data::WINDOW_FONT, 18u);
 			m_TextName.setFillColor(sf::Color::Black);
 			m_Background = sf::RectangleShape({ Data::WINDOW_WIDTH - 100.f, 100.f });
 			m_Background.setOutlineThickness(3.f);
@@ -54,26 +54,23 @@ private:
 			return m_ButtonDelete;
 		}
 
-		inline const std::string getName() const
+		inline const AccountInfo& getAccountInfo()
 		{
-			return m_TextName.getString();
-		}
-		inline const std::string& getUsername() const
-		{
-			return m_Username;
-		}
-		inline const std::string& getPassword() const
-		{
-			return m_Password;
+			return m_AccountInfo;
 		}
 
+		inline void setName(const std::string& name)
+		{
+			m_AccountInfo.name = name;
+			m_TextName.setString(name);
+		}
 		inline void setUsername(const std::string& username)
 		{
-			m_Username = username;
+			m_AccountInfo.username = username;
 		}
 		inline void setPassword(const std::string& password)
 		{
-			m_Password = password;
+			m_AccountInfo.password = password;
 		}
 
 		inline void setPosition(const sf::Vector2f& position)
@@ -109,15 +106,14 @@ private:
 			m_ButtonDelete.render(target);
 		}
 	private:
+		AccountInfo m_AccountInfo;
+
 		sf::Text m_TextName;
 		sf::RectangleShape m_Background;
 
 		TextButton m_ButtonView;
 		TextButton m_ButtonEdit;
 		TextButton m_ButtonDelete;
-
-		std::string m_Username;
-		std::string m_Password;
 	};
 	std::vector<Account> m_Accounts;
 

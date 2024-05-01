@@ -120,11 +120,11 @@ void AccountsPageState::pollEvent()
 						{
 						case MOSTRA:
 						{
-							m_NotifyViewAccount = Notify_ViewAccount(*WINDOW_FONT, { 350.f, 200.f }, "Account: " + acc.getName());
+							m_NotifyViewAccount = Notify_ViewAccount(*WINDOW_FONT, { 350.f, 200.f }, "Account: " + acc.getAccountInfo().name);
 							m_NotifyViewAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
 
 							std::stringstream contents;
-							contents << "Username:\n" << acc.getUsername() << "\n\nPassword:\n" << acc.getPassword();
+							contents << "Username:\n" << acc.getAccountInfo().username << "\n\nPassword:\n" << acc.getAccountInfo().password;
 							m_NotifyViewAccount.setContents(contents.str());
 
 							m_NotifyViewAccount.setActive(true);
@@ -200,7 +200,8 @@ void AccountsPageState::loadAccounts()
 		const std::string& section = it.first;
 		const auto& collection = it.second;
 
-		Account account(section);
+		Account account;
+		account.setName(section);
 
 		for (const auto& it2 : collection)
 		{
