@@ -93,6 +93,22 @@ void AddAccountState::pollEvent()
 						const std::string& nomeutente = m_TextBoxes[Box::NOMEUTENTE].getBuff();
 						const std::string& password = m_TextBoxes[Box::PASSWORD].getBuff();
 
+						if (nome.empty() || nomeutente.empty() || password.empty())
+						{
+							for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
+							{
+								if (m_TextBoxes[i].getBuff().empty())
+								{
+									m_TextBoxes[i].getBackground().setOutlineColor(sf::Color::Red);
+								}
+								else
+								{
+									m_TextBoxes[i].getBackground().setOutlineColor(sf::Color(128, 128, 128));
+								}
+							}
+							break;
+						}
+
 						mINI::INIStructure ini;
 						DATAFILE.read(ini);
 
