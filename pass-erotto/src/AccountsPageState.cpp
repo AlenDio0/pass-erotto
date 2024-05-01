@@ -1,6 +1,7 @@
 #include "AccountsPageState.h"
 
 #include "AddAccountState.h"
+#include "EditAccountState.h"
 
 using namespace Data;
 
@@ -131,6 +132,7 @@ void AccountsPageState::pollEvent()
 						}
 						break;
 						case MODIFICA:
+							g_Machine.add(StateRef(new EditAccountState(acc.getAccountInfo())), false);
 							break;
 						case ELIMINA:
 							break;
