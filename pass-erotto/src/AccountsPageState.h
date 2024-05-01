@@ -35,7 +35,7 @@ private:
 			m_Background.setOutlineColor(sf::Color(128, 128, 128));
 
 			m_ButtonView = TextButton(*Data::WINDOW_FONT, "Mostra", 19u, sf::Color::Black);
-			m_ButtonModify = TextButton(*Data::WINDOW_FONT, "Modifica", 19u, sf::Color::Black);
+			m_ButtonEdit = TextButton(*Data::WINDOW_FONT, "Modifica", 19u, sf::Color::Black);
 			m_ButtonDelete = TextButton(*Data::WINDOW_FONT, "Elimina", 19u, sf::Color::Red);
 
 			setPosition({ 0.f, 0.f });
@@ -45,9 +45,9 @@ private:
 		{
 			return m_ButtonView;
 		}
-		inline TextButton& getButtonModify()
+		inline TextButton& getButtonEdit()
 		{
-			return m_ButtonModify;
+			return m_ButtonEdit;
 		}
 		inline TextButton& getButtonDelete()
 		{
@@ -87,15 +87,15 @@ private:
 				position.y + m_Background.getSize().y - m_ButtonDelete.getBackground().getSize().y - 10.f
 				});
 
-			m_ButtonModify.setPosition
+			m_ButtonEdit.setPosition
 			({
-				m_ButtonDelete.getBackground().getPosition().x - m_ButtonModify.getBackground().getSize().x - 25.f,
-				position.y + m_Background.getSize().y - m_ButtonModify.getBackground().getSize().y - 10.f
+				m_ButtonDelete.getBackground().getPosition().x - m_ButtonEdit.getBackground().getSize().x - 25.f,
+				position.y + m_Background.getSize().y - m_ButtonEdit.getBackground().getSize().y - 10.f
 				});
 
 			m_ButtonView.setPosition
 			({
-				m_ButtonModify.getBackground().getPosition().x - m_ButtonView.getBackground().getSize().x - 25.f,
+				m_ButtonEdit.getBackground().getPosition().x - m_ButtonView.getBackground().getSize().x - 25.f,
 				position.y + m_Background.getSize().y - m_ButtonView.getBackground().getSize().y - 10.f
 				});
 		}
@@ -105,7 +105,7 @@ private:
 			target->draw(m_Background);
 			target->draw(m_TextName);
 			m_ButtonView.render(target);
-			m_ButtonModify.render(target);
+			m_ButtonEdit.render(target);
 			m_ButtonDelete.render(target);
 		}
 	private:
@@ -113,7 +113,7 @@ private:
 		sf::RectangleShape m_Background;
 
 		TextButton m_ButtonView;
-		TextButton m_ButtonModify;
+		TextButton m_ButtonEdit;
 		TextButton m_ButtonDelete;
 
 		std::string m_Username;

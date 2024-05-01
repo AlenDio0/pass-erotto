@@ -70,7 +70,7 @@ void AccountsPageState::pollEvent()
 			for (Account& acc : m_Accounts)
 			{
 				buttons.push_back(&acc.getButtonView());
-				buttons.push_back(&acc.getButtonModify());
+				buttons.push_back(&acc.getButtonEdit());
 				buttons.push_back(&acc.getButtonDelete());
 			}
 
@@ -109,7 +109,7 @@ void AccountsPageState::pollEvent()
 				std::unordered_map<uint8_t, TextButton*> buttons;
 
 				buttons[MOSTRA] = &acc.getButtonView();
-				buttons[MODIFICA] = &acc.getButtonModify();
+				buttons[MODIFICA] = &acc.getButtonEdit();
 				buttons[ELIMINA] = &acc.getButtonDelete();
 
 				for (uint8_t i = 0; i < buttons.size(); i++)
