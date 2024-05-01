@@ -1,7 +1,7 @@
 #include "Notify.h"
 
 Notify::Notify(sf::Font& font, const sf::Vector2f& size, const std::string& header)
-	: m_Background(size), m_TextHeader(header, font, 20u), m_TextContents("Contents", font, 20u), m_ButtonOk(font, "Ok", 20u), m_Active(false)
+	: m_Background(size), m_TextHeader(header, font, 20u), m_TextContents("Contents", font, 20u), m_Active(false)
 {
 	m_Background.setOutlineThickness(2.f);
 	m_Background.setOutlineColor(sf::Color(128, 128, 128));
@@ -11,10 +11,11 @@ Notify::Notify(sf::Font& font, const sf::Vector2f& size, const std::string& head
 	m_TextContents.setFillColor(sf::Color::Black);
 }
 
-TextButton& Notify::getButtonOk()
+std::unordered_map<uint8_t, TextButton>& Notify::getButtons()
 {
-	return m_ButtonOk;
+	return m_Buttons;
 }
+
 
 void Notify::setContents(const std::string& contents)
 {
@@ -38,7 +39,10 @@ void Notify::render(sf::RenderTarget* target)
 	target->draw(m_TextHeader);
 	target->draw(m_TextContents);
 
-	m_ButtonOk.render(target);
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		m_Buttons[i].render(target);
+	}
 }
 
 void Notify::setInPosition(const sf::Vector2f& position)
@@ -47,9 +51,4 @@ void Notify::setInPosition(const sf::Vector2f& position)
 
 	m_TextHeader.setPosition(position);
 	m_TextContents.setPosition(position.x, position.y + m_TextHeader.getCharacterSize() + 5.f);
-
-	m_ButtonOk.setPosition
-	({ position.x + m_Background.getSize().x - m_ButtonOk.getBackground().getSize().x - 10.f,
-		position.y + m_Background.getSize().y - m_ButtonOk.getBackground().getSize().y - 10.f
-		});
 }
