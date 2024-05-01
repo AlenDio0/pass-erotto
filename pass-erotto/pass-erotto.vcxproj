@@ -155,6 +155,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AccountInfo.h" />
     <ClInclude Include="src\Notify.h" />
     <ClInclude Include="src\AddAccountState.h" />
     <ClInclude Include="src\AccountsPageState.h" />
