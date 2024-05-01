@@ -46,6 +46,22 @@ void AccountsPageState::pollEvent()
 			break;
 		case sf::Event::MouseMoved:
 		{
+			if (m_NotifyViewAccount.isActive())
+			{
+				TextButton& button = m_NotifyViewAccount.getButtonOk();
+
+				if (button.isCursorOn(*g_Window))
+				{
+					button.setHighlight(true);
+				}
+				else
+				{
+					button.setHighlight(false);
+				}
+
+				break;
+			}
+
 			std::vector<TextButton*> buttons;
 
 			buttons.push_back(&m_Buttons[Button::AGGIUNGI]);
@@ -72,6 +88,57 @@ void AccountsPageState::pollEvent()
 		}
 		break;
 		case sf::Event::MouseButtonPressed:
+			if (m_NotifyViewAccount.isActive())
+			{
+				if (m_NotifyViewAccount.getButtonOk().isCursorOn(*g_Window))
+				{
+					m_NotifyViewAccount.setActive(false);
+				}
+
+				break;
+			}
+
+			for (Account& acc : m_Accounts)
+			{
+				enum : uint8_t
+				{
+					MOSTRA,
+					MODIFICA,
+					ELIMINA,
+				};
+				std::unordered_map<uint8_t, TextButton*> buttons;
+
+				buttons[MOSTRA] = &acc.getButtonView();
+				buttons[MODIFICA] = &acc.getButtonModify();
+				buttons[ELIMINA] = &acc.getButtonDelete();
+
+				for (uint8_t i = 0; i < buttons.size(); i++)
+				{
+					if (buttons[i]->isCursorOn(*g_Window))
+					{
+						switch (i)
+						{
+						case MOSTRA:
+						{
+							m_NotifyViewAccount = Notify_ViewAccount(*WINDOW_FONT, { 350.f, 200.f }, "Account: " + acc.getName());
+							m_NotifyViewAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
+
+							std::stringstream contents;
+							contents << "Username:\n" << acc.getUsername() << "\n\nPassword:\n" << acc.getPassword();
+							m_NotifyViewAccount.setContents(contents.str());
+
+							m_NotifyViewAccount.setActive(true);
+						}
+						break;
+						case MODIFICA:
+							break;
+						case ELIMINA:
+							break;
+						}
+					}
+				}
+			}
+
 			for (uint8_t i = 0; i < m_Buttons.size(); i++)
 			{
 				if (m_Buttons[i].isCursorOn(*g_Window))
@@ -111,6 +178,11 @@ void AccountsPageState::render()
 	for (uint8_t i = 0; i < m_Buttons.size(); i++)
 	{
 		m_Buttons[i].render(g_Window);
+	}
+
+	if (m_NotifyViewAccount.isActive())
+	{
+		m_NotifyViewAccount.render(g_Window);
 	}
 
 	g_Window->display();
