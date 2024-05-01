@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include "TextButton.h"
+#include "Notify.h"
 
 class AccountsPageState : public State
 {
@@ -33,7 +34,7 @@ private:
 			m_Background.setOutlineThickness(3.f);
 			m_Background.setOutlineColor(sf::Color(128, 128, 128));
 
-			m_ButtonView = TextButton(*Data::WINDOW_FONT, "Vedi", 19u, sf::Color::Black);
+			m_ButtonView = TextButton(*Data::WINDOW_FONT, "Mostra", 19u, sf::Color::Black);
 			m_ButtonModify = TextButton(*Data::WINDOW_FONT, "Modifica", 19u, sf::Color::Black);
 			m_ButtonDelete = TextButton(*Data::WINDOW_FONT, "Elimina", 19u, sf::Color::Red);
 
@@ -53,6 +54,10 @@ private:
 			return m_ButtonDelete;
 		}
 
+		inline const std::string getName() const
+		{
+			return m_TextName.getString();
+		}
 		inline const std::string& getUsername() const
 		{
 			return m_Username;
@@ -122,6 +127,28 @@ private:
 		AGGIUNGI,
 		RITORNA,
 	};
+
+	class Notify_ViewAccount : public Notify
+	{
+	public:
+		Notify_ViewAccount() = default;
+		inline Notify_ViewAccount(sf::Font& font, const sf::Vector2f& size, const std::string& header)
+			: Notify(font, size, header)
+		{
+			m_TextHeader.setCharacterSize(25u);
+			m_TextHeader.setStyle(sf::Text::Bold);
+
+			m_TextContents.setCharacterSize(15u);
+		}
+
+		inline void setPosition(const sf::Vector2f& position) override
+		{
+			setInPosition(position);
+		}
+	private:
+
+	};
+	Notify_ViewAccount m_NotifyViewAccount;
 
 	void loadAccounts();
 };
