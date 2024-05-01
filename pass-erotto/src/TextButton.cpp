@@ -44,7 +44,7 @@ void TextButton::setHighlight(const bool& highlight)
 	m_Highlight = highlight;
 }
 
-const bool& TextButton::isCursorOn(const sf::WindowBase& window)
+const bool& TextButton::isCursorOn(const sf::WindowBase& window) const
 {
 	return m_Background.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window));
 }
