@@ -9,12 +9,16 @@ public:
 	Notify() = default;
 	Notify(sf::Font& font, const sf::Vector2f& size, const std::string& header);
 
-	virtual void init() = 0;
-
-	const bool& isCursorOnButtonOk(const sf::WindowBase& window);
+	TextButton& getButtonOk();
 
 	virtual void setPosition(const sf::Vector2f& position) = 0;
 	void setContents(const std::string& contents);
+
+	void setActive(const bool& active);
+
+	const bool& isActive() const;
+
+	void render(sf::RenderTarget* target);
 protected:
 	sf::RectangleShape m_Background;
 
@@ -22,6 +26,8 @@ protected:
 	sf::Text m_TextContents;
 
 	TextButton m_ButtonOk;
+
+	bool m_Active;
 
 	void setInPosition(const sf::Vector2f& position);
 };
