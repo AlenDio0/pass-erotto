@@ -1,6 +1,7 @@
 #include "MainMenuState.h"
 
 #include "AccountsPageState.h"
+#include "SettingsState.h"
 
 using namespace Data;
 
@@ -64,7 +65,7 @@ void MainMenuState::pollEvent()
 						g_Machine.add(StateRef(new AccountsPageState()), false);
 						break;
 					case Button::IMPOSTAZIONI:
-						g_Machine.add(StateRef(), false);
+						g_Machine.add(StateRef(new SettingsState), false);
 						break;
 					case Button::AIUTO:
 						g_Machine.add(StateRef(), false);
