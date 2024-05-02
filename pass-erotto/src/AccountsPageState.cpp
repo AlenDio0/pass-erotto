@@ -221,6 +221,44 @@ void AccountsPageState::pollEvent()
 				}
 			}
 			break;
+		case sf::Event::MouseWheelScrolled:
+			if (m_Accounts.empty())
+			{
+				break;
+			}
+
+			{
+				const float DELTA = event.mouseWheelScroll.delta;
+				const float X_DEFAULT = 10.f;
+
+				const int Y_MOVE = 55;
+
+				if (DELTA > 0.f)
+				{
+					for (uint16_t i = 0; i < m_Accounts.size(); i++)
+					{
+						const float Y_DEFAULT = m_Background.getSize().y + 10.f + 110.f * i;
+
+						if (m_Accounts[i].getPosition().y != Y_DEFAULT)
+						{
+							m_Accounts[i].setPosition({ X_DEFAULT, m_Accounts[i].getPosition().y + Y_MOVE });
+						}
+					}
+				}
+				else if (DELTA < 0.f)
+				{
+					for (uint16_t i = 0; i < m_Accounts.size(); i++)
+					{
+						const float Y_DEFAULT = m_Background.getSize().y + 10.f + 110.f * i;
+
+						if (m_Accounts[i].getPosition().y <= Y_DEFAULT)
+						{
+							m_Accounts[i].setPosition({ X_DEFAULT, m_Accounts[i].getPosition().y - Y_MOVE });
+						}
+					}
+				}
+			}
+			break;
 		}
 	}
 }
@@ -233,14 +271,15 @@ void AccountsPageState::render()
 {
 	g_Window->clear(WINDOW_BACKGROUND);
 
-	g_Window->draw(m_Background);
-
-	g_Window->draw(m_TextTitle);
-
 	for (Account& acc : m_Accounts)
 	{
 		acc.render(g_Window);
 	}
+
+	g_Window->draw(m_Background);
+
+	g_Window->draw(m_TextTitle);
+
 	for (uint8_t i = 0; i < m_Buttons.size(); i++)
 	{
 		m_Buttons[i].render(g_Window);

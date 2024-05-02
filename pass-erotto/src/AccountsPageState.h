@@ -59,6 +59,11 @@ private:
 			return m_AccountInfo;
 		}
 
+		inline const sf::Vector2f& getPosition()
+		{
+			return m_Background.getPosition();
+		}
+
 		inline void setName(const std::string& name)
 		{
 			m_AccountInfo.name = name;
