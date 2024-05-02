@@ -4,6 +4,13 @@ namespace Data
 {
 	void INIT()
 	{
+		{
+			std::ofstream file(SETTINGSDATAFILE_NAME, std::ios::app);
+			file.close();
+			file.open(DATAFILE_NAME, std::ios::app);
+		}
+
+
 		WINDOW_FONT = new sf::Font();
 		WINDOW_FONT->loadFromFile("C:/Windows/Fonts/arial.ttf");
 
