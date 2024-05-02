@@ -1,18 +1,13 @@
 #include "PINState.h"
 
 #include "MainMenuState.h"
+#include "CreatePINState.h"
 
 using namespace Data;
 
 PINState::PINState()
 {
-	if (!loadPIN())
-	{
-		//CREATE PIN
-		m_EncryptedPIN = "0000";
-	}
-
-	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, 40u);
+	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, 35u);
 	m_TextInsertPIN.setPosition({ 25.f, WINDOW_HEIGTH / 6.f });
 	m_TextInsertPIN.setStyle(sf::Text::Bold);
 	m_TextInsertPIN.setOutlineThickness(2.f);
@@ -40,6 +35,22 @@ void PINState::pollEvent()
 			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
+			if (m_NotifyWrongPIN.isActive())
+			{
+				TextButton& button = m_NotifyWrongPIN.getButtons()[Notify_WrongPIN::OK];
+
+				if (button.isCursorOn(*g_Window))
+				{
+					button.setHighlight(true);
+				}
+				else
+				{
+					button.setHighlight(false);
+				}
+
+				break;
+			}
+
 			if (m_ButtonConfirm.isCursorOn(*g_Window))
 			{
 				m_ButtonConfirm.setHighlight(true);
@@ -50,6 +61,16 @@ void PINState::pollEvent()
 			}
 			break;
 		case sf::Event::MouseButtonPressed:
+			if (m_NotifyWrongPIN.isActive())
+			{
+				if (m_NotifyWrongPIN.getButtons()[Notify_WrongPIN::OK].isCursorOn(*g_Window))
+				{
+					m_NotifyWrongPIN.setActive(false);
+				}
+
+				break;
+			}
+
 			if (m_TextBoxPIN.isCursorOn(*g_Window))
 			{
 				m_TextBoxPIN.setSelected(true);
@@ -61,13 +82,14 @@ void PINState::pollEvent()
 
 			if (m_ButtonConfirm.isCursorOn(*g_Window))
 			{
-				if (m_EncryptedPIN == m_TextBoxPIN.getBuff())
+				if (m_PIN == m_TextBoxPIN.getBuff())
 				{
 					g_Machine.add(StateRef(new MainMenuState()), true);
 				}
 				else
 				{
-					//TODO: comparsa errore
+					m_NotifyWrongPIN = Notify_WrongPIN();
+					m_NotifyWrongPIN.setActive(true);
 				}
 			}
 			break;
@@ -80,6 +102,20 @@ void PINState::pollEvent()
 
 void PINState::update()
 {
+	static bool loadedPIN = false;
+
+	if (!loadedPIN)
+	{
+		if (!loadPIN())
+		{
+			g_Machine.add(StateRef(new CreatePINState()), false);
+		}
+		else
+		{
+			loadedPIN = true;
+		}
+	}
+
 	m_TextBoxPIN.update();
 }
 
@@ -93,29 +129,24 @@ void PINState::render()
 
 	m_ButtonConfirm.render(g_Window);
 
+	if (m_NotifyWrongPIN.isActive())
+	{
+		m_NotifyWrongPIN.render(g_Window);
+	}
+
 	g_Window->display();
 }
 
 bool PINState::loadPIN()
 {
-	std::ifstream file("data");
+	mINI::INIStructure ini;
+	SETTINGSDATAFILE.read(ini);
 
-	if (!file.is_open())
+	if (ini["settings"]["pin"].empty())
 	{
 		return false;
 	}
 
-	std::string buff;
-	while (!file.eof())
-	{
-		file >> buff;
-
-		if (buff == "pin")
-		{
-			file >> m_EncryptedPIN;
-			return true;
-		}
-	}
-
-	return false;
+	m_PIN = ini["settings"]["pin"];
+	return true;
 }

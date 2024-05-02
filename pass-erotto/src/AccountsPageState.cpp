@@ -7,7 +7,7 @@ using namespace Data;
 
 AccountsPageState::AccountsPageState()
 {
-	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, 50u);
+	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, 40u);
 	m_TextTitle.setPosition(WINDOW_WIDTH / 2.f - m_TextTitle.getGlobalBounds().getSize().x / 2.f, 0.f);
 	m_TextTitle.setOutlineThickness(2.f);
 	m_TextTitle.setOutlineColor(sf::Color::Black);
@@ -174,11 +174,10 @@ void AccountsPageState::pollEvent()
 						{
 						case MOSTRA:
 						{
-							m_NotifyViewAccount = Notify_ViewAccount(*WINDOW_FONT, { 350.f, 200.f }, "Account: " + acc.getAccountInfo().name);
-							m_NotifyViewAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
+							m_NotifyViewAccount = Notify_ViewAccount("Account: " + acc.getAccountInfo().name);
 
 							std::stringstream contents;
-							contents << "Username:\n" << acc.getAccountInfo().username << "\n\nPassword:\n" << acc.getAccountInfo().password;
+							contents << "\nNome utente:\n" << acc.getAccountInfo().username << "\n\nPassword:\n" << acc.getAccountInfo().password;
 							m_NotifyViewAccount.setContents(contents.str());
 
 							m_NotifyViewAccount.setActive(true);
@@ -189,8 +188,7 @@ void AccountsPageState::pollEvent()
 							break;
 						case ELIMINA:
 						{
-							m_NotifyDeleteAccount = Notify_DeleteAccount(*WINDOW_FONT, { 350.f, 200.f }, "Sei Sicuro?", acc.getAccountInfo().name);
-							m_NotifyDeleteAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
+							m_NotifyDeleteAccount = Notify_DeleteAccount(acc.getAccountInfo().name);
 
 							std::stringstream contents;
 							contents << "\nStai per eliminare:\n" << acc.getAccountInfo().name
@@ -221,6 +219,44 @@ void AccountsPageState::pollEvent()
 				}
 			}
 			break;
+		case sf::Event::MouseWheelScrolled:
+			if (m_Accounts.empty())
+			{
+				break;
+			}
+
+			{
+				const float DELTA = event.mouseWheelScroll.delta;
+				const float X_DEFAULT = 10.f;
+
+				const int Y_MOVE = 55;
+
+				if (DELTA > 0.f)
+				{
+					for (uint16_t i = 0; i < m_Accounts.size(); i++)
+					{
+						const float Y_DEFAULT = m_Background.getSize().y + 10.f + 110.f * i;
+
+						if (m_Accounts[i].getPosition().y != Y_DEFAULT)
+						{
+							m_Accounts[i].setPosition({ X_DEFAULT, m_Accounts[i].getPosition().y + Y_MOVE });
+						}
+					}
+				}
+				else if (DELTA < 0.f)
+				{
+					for (uint16_t i = 0; i < m_Accounts.size(); i++)
+					{
+						const float Y_DEFAULT = m_Background.getSize().y + 10.f + 110.f * i;
+
+						if (m_Accounts[i].getPosition().y <= Y_DEFAULT)
+						{
+							m_Accounts[i].setPosition({ X_DEFAULT, m_Accounts[i].getPosition().y - Y_MOVE });
+						}
+					}
+				}
+			}
+			break;
 		}
 	}
 }
@@ -233,14 +269,15 @@ void AccountsPageState::render()
 {
 	g_Window->clear(WINDOW_BACKGROUND);
 
-	g_Window->draw(m_Background);
-
-	g_Window->draw(m_TextTitle);
-
 	for (Account& acc : m_Accounts)
 	{
 		acc.render(g_Window);
 	}
+
+	g_Window->draw(m_Background);
+
+	g_Window->draw(m_TextTitle);
+
 	for (uint8_t i = 0; i < m_Buttons.size(); i++)
 	{
 		m_Buttons[i].render(g_Window);
