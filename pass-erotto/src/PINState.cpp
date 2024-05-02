@@ -1,17 +1,12 @@
 #include "PINState.h"
 
 #include "MainMenuState.h"
+#include "CreatePINState.h"
 
 using namespace Data;
 
 PINState::PINState()
 {
-	if (!loadPIN())
-	{
-		//CREATE PIN
-		m_EncryptedPIN = "0000";
-	}
-
 	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, 40u);
 	m_TextInsertPIN.setPosition({ 25.f, WINDOW_HEIGTH / 6.f });
 	m_TextInsertPIN.setStyle(sf::Text::Bold);
@@ -61,7 +56,7 @@ void PINState::pollEvent()
 
 			if (m_ButtonConfirm.isCursorOn(*g_Window))
 			{
-				if (m_EncryptedPIN == m_TextBoxPIN.getBuff())
+				if (m_PIN == m_TextBoxPIN.getBuff())
 				{
 					g_Machine.add(StateRef(new MainMenuState()), true);
 				}
@@ -80,6 +75,20 @@ void PINState::pollEvent()
 
 void PINState::update()
 {
+	static bool loadedPIN = false;
+
+	if (!loadedPIN)
+	{
+		if (!loadPIN())
+		{
+			g_Machine.add(StateRef(new CreatePINState()), false);
+		}
+		else
+		{
+			loadedPIN = true;
+		}
+	}
+
 	m_TextBoxPIN.update();
 }
 
@@ -98,24 +107,14 @@ void PINState::render()
 
 bool PINState::loadPIN()
 {
-	std::ifstream file("data");
+	mINI::INIStructure ini;
+	SETTINGSDATAFILE.read(ini);
 
-	if (!file.is_open())
+	if (ini["settings"]["pin"].empty())
 	{
 		return false;
 	}
 
-	std::string buff;
-	while (!file.eof())
-	{
-		file >> buff;
-
-		if (buff == "pin")
-		{
-			file >> m_EncryptedPIN;
-			return true;
-		}
-	}
-
-	return false;
+	m_PIN = ini["settings"]["pin"];
+	return true;
 }

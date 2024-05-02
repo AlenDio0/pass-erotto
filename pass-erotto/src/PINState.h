@@ -18,7 +18,7 @@ public:
 	void update();
 	void render();
 private:
-	std::string m_EncryptedPIN;
+	std::string m_PIN;
 
 	sf::Text m_TextInsertPIN;
 	TextBox m_TextBoxPIN;
