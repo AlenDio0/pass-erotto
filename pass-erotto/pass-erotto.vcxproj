@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\SettingsState.cpp" />
     <ClCompile Include="src\CreatePINState.cpp" />
     <ClCompile Include="src\EditAccountState.cpp" />
     <ClCompile Include="src\Notify.cpp" />
@@ -157,6 +158,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\SettingsState.h" />
     <ClInclude Include="src\CreatePINState.h" />
     <ClInclude Include="src\AccountInfo.h" />
     <ClInclude Include="src\EditAccountState.h" />

@@ -48,6 +48,9 @@
     <ClCompile Include="src\CreatePINState.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="src\SettingsState.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Data.h">
@@ -81,6 +84,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="src\CreatePINState.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SettingsState.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
