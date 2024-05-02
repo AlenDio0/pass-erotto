@@ -6,12 +6,12 @@ This app has now with beta2.0 these features:
 - View an account
 - Modify/Edit an account
 - Delete an account
+- Create your own PIN
 
 ## TODO
 - Ecryption and Decryption
-- Scroll the accounts page when there are too much accounts
-- "Impostazioni" and "Aiuto" pages (SettingsState and HelpState)
-- CreatePINState (for now you can only use "0000" as PIN)
+- "Aiuto" page (HelpState)
+- Auto-generate a password in the AddAccountState and EditAccountState
 
 ## Credits
 - [SFML](https://www.sfml-dev.org/) - Multimedia library
