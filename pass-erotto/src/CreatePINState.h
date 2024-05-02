@@ -1,16 +1,16 @@
 #pragma once
 #include "State.h"
 
-#include <fstream>
 #include "Data.h"
 
+#include <unordered_map>
 #include "TextBox.h"
 #include "TextButton.h"
 
-class PINState : public State
+class CreatePINState : public State
 {
 public:
-	PINState();
+	CreatePINState();
 
 	void init();
 
@@ -18,12 +18,14 @@ public:
 	void update();
 	void render();
 private:
-	std::string m_PIN;
-
 	sf::Text m_TextInsertPIN;
 	TextBox m_TextBoxPIN;
 
-	TextButton m_ButtonConfirm;
-
-	bool loadPIN();
+	std::unordered_map<uint8_t, TextButton> m_Buttons;
+	enum Button : uint8_t
+	{
+		CONFERMA,
+		ANNULLA,
+	};
 };
+

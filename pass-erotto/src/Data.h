@@ -2,6 +2,7 @@
 #include "StateMachine.h"
 #include <SFML\Graphics.hpp>
 
+#include <fstream>
 #include <ini.h>
 
 namespace Data
@@ -15,6 +16,9 @@ namespace Data
 
 	static const std::string DATAFILE_NAME = "data";
 	inline mINI::INIFile DATAFILE(DATAFILE_NAME);
+
+	static const std::string SETTINGSDATAFILE_NAME = "settings_data";
+	inline mINI::INIFile SETTINGSDATAFILE(SETTINGSDATAFILE_NAME);
 
 	static const sf::Color WINDOW_BACKGROUND(70, 100, 170);
 	inline sf::Font* WINDOW_FONT = NULL;
