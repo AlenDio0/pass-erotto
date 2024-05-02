@@ -16,17 +16,17 @@ CreatePINState::CreatePINState()
 	const uint8_t CHAR_SIZE = 40u;
 	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
 
-	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", CHAR_SIZE);
-	m_Buttons[Button::CONFERMA].setPosition
-	({
-		X_AXISPOS - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().x / 2.f,
-		WINDOW_HEIGTH - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().y - 50.f
-		});
 	m_Buttons[Button::ANNULLA] = TextButton(*WINDOW_FONT, "Annulla", CHAR_SIZE);
 	m_Buttons[Button::ANNULLA].setPosition
 	({
 		X_AXISPOS - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().x / 2.f,
-		m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getPosition().y - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().y - 50.f
+		WINDOW_HEIGTH - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().y - 50.f
+		});
+	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", CHAR_SIZE);
+	m_Buttons[Button::CONFERMA].setPosition
+	({
+		X_AXISPOS - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().x / 2.f,
+		m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getPosition().y - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().y - 50.f
 		});
 }
 
@@ -83,7 +83,7 @@ void CreatePINState::pollEvent()
 						}
 						break;
 					case Button::ANNULLA:
-						g_Window->close();
+						g_Machine.remove();
 						break;
 					}
 				}
