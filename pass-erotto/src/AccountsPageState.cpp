@@ -7,7 +7,7 @@ using namespace Data;
 
 AccountsPageState::AccountsPageState()
 {
-	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, 50u);
+	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, 40u);
 	m_TextTitle.setPosition(WINDOW_WIDTH / 2.f - m_TextTitle.getGlobalBounds().getSize().x / 2.f, 0.f);
 	m_TextTitle.setOutlineThickness(2.f);
 	m_TextTitle.setOutlineColor(sf::Color::Black);
