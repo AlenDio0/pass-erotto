@@ -7,7 +7,7 @@ using namespace Data;
 
 PINState::PINState()
 {
-	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, 40u);
+	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, 35u);
 	m_TextInsertPIN.setPosition({ 25.f, WINDOW_HEIGTH / 6.f });
 	m_TextInsertPIN.setStyle(sf::Text::Bold);
 	m_TextInsertPIN.setOutlineThickness(2.f);

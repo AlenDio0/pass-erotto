@@ -12,7 +12,10 @@ namespace Data
 
 
 		WINDOW_FONT = new sf::Font();
-		WINDOW_FONT->loadFromFile("C:/Windows/Fonts/arial.ttf");
+		if (!WINDOW_FONT->loadFromFile("consola.ttf"))
+		{
+			WINDOW_FONT->loadFromFile("C:/Windows/Fonts/consola.ttf");
+		}
 
 		g_Window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGTH), WINDOW_TITLE, WINDOW_STYLE);
 
