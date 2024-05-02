@@ -49,6 +49,6 @@ void Notify::setInPosition(const sf::Vector2f& position)
 {
 	m_Background.setPosition(position);
 
-	m_TextHeader.setPosition(position);
-	m_TextContents.setPosition(position.x, position.y + m_TextHeader.getCharacterSize() + 5.f);
+	m_TextHeader.setPosition(position.x + 10.f, position.y + 10.f);
+	m_TextContents.setPosition(position.x + 10.f, position.y + m_TextHeader.getCharacterSize() + 15.f);
 }

@@ -133,8 +133,8 @@ private:
 	{
 	public:
 		Notify_ViewAccount() = default;
-		inline Notify_ViewAccount(sf::Font& font, const sf::Vector2f& size, const std::string& header)
-			: Notify(font, size, header)
+		inline Notify_ViewAccount(const std::string& header)
+			: Notify(*Data::WINDOW_FONT, { 350.f, 200.f }, header)
 		{
 			m_TextHeader.setCharacterSize(25u);
 			m_TextHeader.setStyle(sf::Text::Bold);
@@ -143,7 +143,7 @@ private:
 
 			m_Buttons[Button::OK] = TextButton(*Data::WINDOW_FONT, "Ok", 20u);
 
-			setPosition({ 0, 0 });
+			setPosition({ Data::WINDOW_WIDTH / 2.f - 350.f / 2.f, Data::WINDOW_HEIGTH / 2.f - 200.f / 2.f });
 		}
 
 		enum Button : uint8_t
@@ -169,8 +169,8 @@ private:
 	{
 	public:
 		Notify_DeleteAccount() = default;
-		inline Notify_DeleteAccount(sf::Font& font, const sf::Vector2f& size, const std::string& header, const std::string& accname)
-			: Notify(font, size, header), m_AccountName(accname)
+		inline Notify_DeleteAccount(const std::string& accname)
+			: Notify(*Data::WINDOW_FONT, { 350.f, 200.f }, "Sei sicuro?"), m_AccountName(accname)
 		{
 			m_TextHeader.setCharacterSize(25u);
 			m_TextHeader.setStyle(sf::Text::Bold);
@@ -180,7 +180,7 @@ private:
 			m_Buttons[Button::CONFERMA] = TextButton(*Data::WINDOW_FONT, "Conferma", 20u);
 			m_Buttons[Button::ANNULLA] = TextButton(*Data::WINDOW_FONT, "Annulla", 20u);
 
-			setPosition({ 0, 0 });
+			setPosition({ Data::WINDOW_WIDTH / 2.f - 350.f / 2.f, Data::WINDOW_HEIGTH / 2.f - 200.f / 2.f });
 		}
 
 		enum Button : uint8_t

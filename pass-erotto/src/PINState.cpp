@@ -35,6 +35,22 @@ void PINState::pollEvent()
 			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
+			if (m_NotifyWrongPIN.isActive())
+			{
+				TextButton& button = m_NotifyWrongPIN.getButtons()[Notify_WrongPIN::OK];
+
+				if (button.isCursorOn(*g_Window))
+				{
+					button.setHighlight(true);
+				}
+				else
+				{
+					button.setHighlight(false);
+				}
+
+				break;
+			}
+
 			if (m_ButtonConfirm.isCursorOn(*g_Window))
 			{
 				m_ButtonConfirm.setHighlight(true);
@@ -45,6 +61,16 @@ void PINState::pollEvent()
 			}
 			break;
 		case sf::Event::MouseButtonPressed:
+			if (m_NotifyWrongPIN.isActive())
+			{
+				if (m_NotifyWrongPIN.getButtons()[Notify_WrongPIN::OK].isCursorOn(*g_Window))
+				{
+					m_NotifyWrongPIN.setActive(false);
+				}
+
+				break;
+			}
+
 			if (m_TextBoxPIN.isCursorOn(*g_Window))
 			{
 				m_TextBoxPIN.setSelected(true);
@@ -62,7 +88,8 @@ void PINState::pollEvent()
 				}
 				else
 				{
-					//TODO: comparsa errore
+					m_NotifyWrongPIN = Notify_WrongPIN();
+					m_NotifyWrongPIN.setActive(true);
 				}
 			}
 			break;
@@ -101,6 +128,11 @@ void PINState::render()
 	m_TextBoxPIN.render(g_Window);
 
 	m_ButtonConfirm.render(g_Window);
+
+	if (m_NotifyWrongPIN.isActive())
+	{
+		m_NotifyWrongPIN.render(g_Window);
+	}
 
 	g_Window->display();
 }

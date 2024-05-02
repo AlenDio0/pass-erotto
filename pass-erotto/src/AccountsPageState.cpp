@@ -174,11 +174,10 @@ void AccountsPageState::pollEvent()
 						{
 						case MOSTRA:
 						{
-							m_NotifyViewAccount = Notify_ViewAccount(*WINDOW_FONT, { 350.f, 200.f }, "Account: " + acc.getAccountInfo().name);
-							m_NotifyViewAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
+							m_NotifyViewAccount = Notify_ViewAccount("Account: " + acc.getAccountInfo().name);
 
 							std::stringstream contents;
-							contents << "Username:\n" << acc.getAccountInfo().username << "\n\nPassword:\n" << acc.getAccountInfo().password;
+							contents << "\nNome utente:\n" << acc.getAccountInfo().username << "\n\nPassword:\n" << acc.getAccountInfo().password;
 							m_NotifyViewAccount.setContents(contents.str());
 
 							m_NotifyViewAccount.setActive(true);
@@ -189,8 +188,7 @@ void AccountsPageState::pollEvent()
 							break;
 						case ELIMINA:
 						{
-							m_NotifyDeleteAccount = Notify_DeleteAccount(*WINDOW_FONT, { 350.f, 200.f }, "Sei Sicuro?", acc.getAccountInfo().name);
-							m_NotifyDeleteAccount.setPosition({ WINDOW_WIDTH / 2.f - 350.f / 2.f, WINDOW_HEIGTH / 2.f - 200.f / 2.f });
+							m_NotifyDeleteAccount = Notify_DeleteAccount(acc.getAccountInfo().name);
 
 							std::stringstream contents;
 							contents << "\nStai per eliminare:\n" << acc.getAccountInfo().name
