@@ -15,6 +15,7 @@ public:
 	void setPosition(const sf::Vector2f& position);
 	void setPlaceHolder(const std::string& placeholder);
 	void setSelected(const bool& selected);
+	void setString(const std::string& string);
 
 	bool isCursorOn(const sf::WindowBase& window);
 

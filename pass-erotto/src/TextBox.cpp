@@ -60,6 +60,12 @@ void TextBox::setSelected(const bool& selected)
 	}
 }
 
+void TextBox::setString(const std::string& string)
+{
+	m_Buff.str("");
+	m_Buff << string;
+}
+
 bool TextBox::isCursorOn(const sf::WindowBase& window)
 {
 	return m_Background.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window));
