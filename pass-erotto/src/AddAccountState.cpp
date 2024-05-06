@@ -4,6 +4,8 @@ using namespace Data;
 
 AddAccountState::AddAccountState()
 {
+	srand((unsigned)time(NULL));
+
 	const uint8_t CHAR_SIZE1 = 25u, CHAR_SIZE2 = 20u;
 	const float X_AXISPOS = WINDOW_WIDTH / 2.f, Y_POS = 125.f;
 	const float Y_SPACING = 100.f;
@@ -27,6 +29,12 @@ AddAccountState::AddAccountState()
 		m_Texts[i].setOutlineThickness(2.f);
 	}
 
+	m_Buttons[Button::GENERA] = TextButton(*WINDOW_FONT, "Genera Password", 20u);
+	m_Buttons[Button::GENERA].setPosition
+	({
+		X_AXISPOS - m_Buttons[Button::GENERA].getBackground().getSize().x / 2.f,
+		m_TextBoxes[Box::PASSWORD].getBackground().getPosition().y + m_TextBoxes[Box::PASSWORD].getBackground().getSize().y + 20.f
+		});
 	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", 30u);
 	m_Buttons[Button::CONFERMA].setPosition
 	({
@@ -87,6 +95,22 @@ void AddAccountState::pollEvent()
 				{
 					switch (i)
 					{
+					case Button::GENERA:
+					{
+						std::string new_password;
+
+						for (int i = 0; i < 12; i++)
+						{
+							static const std::string usableChars = "0123456789!£$%&/()=?^[]QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+							char c = usableChars[rand() % usableChars.length()];
+
+							new_password.push_back(c);
+						}
+
+						m_TextBoxes[Box::PASSWORD].setString(new_password);
+						m_TextBoxes[Box::PASSWORD].setSelected(true);
+					}
+					break;
 					case Button::CONFERMA:
 					{
 						const std::string& nome = m_TextBoxes[Box::NOME].getBuff();

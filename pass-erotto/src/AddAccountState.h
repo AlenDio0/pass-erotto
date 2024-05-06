@@ -3,6 +3,7 @@
 
 #include "Data.h"
 
+#include <time.h>
 #include <unordered_map>
 #include "TextButton.h"
 #include "TextBox.h"
@@ -29,6 +30,7 @@ private:
 	std::unordered_map<uint8_t, TextButton> m_Buttons;
 	enum Button : uint8_t
 	{
+		GENERA,
 		CONFERMA,
 		ANNULLA,
 	};
