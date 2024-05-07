@@ -1,7 +1,7 @@
 # pass-erotto
 
 ## Features
-This app has now with beta2.0 these features:
+This app has now with beta3.0 these features:
 - Add a new account
 - View an account
 - Modify/Edit an account
