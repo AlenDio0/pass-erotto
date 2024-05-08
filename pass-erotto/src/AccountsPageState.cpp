@@ -12,10 +12,18 @@ AccountsPageState::AccountsPageState()
 	m_TextTitle.setOutlineThickness(2.f);
 	m_TextTitle.setOutlineColor(sf::Color::Black);
 
-	m_Background = sf::RectangleShape({ WINDOW_WIDTH, 60.f });
+	m_Background = sf::RectangleShape({ WINDOW_WIDTH, 120.f });
 	m_Background.setFillColor(sf::Color::Blue);
 	m_Background.setOutlineThickness(4.f);
 	m_Background.setOutlineColor(sf::Color::Black);
+
+	m_TextBoxSearch = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 14u);
+	m_TextBoxSearch.setPosition
+	({
+		WINDOW_WIDTH / 2.f - m_TextBoxSearch.getBackground().getSize().x / 2.f,
+		m_Background.getSize().y - m_TextBoxSearch.getBackground().getSize().y - 10.f
+		});
+	m_TextBoxSearch.setPlaceHolder("Cerca...");
 
 	m_Buttons[Button::AGGIUNGI] = TextButton(*WINDOW_FONT, " + ", 30u, sf::Color::Black);
 	m_Buttons[Button::AGGIUNGI].setPosition({ WINDOW_WIDTH - m_Buttons[Button::AGGIUNGI].getBackground().getSize().x - 10.f, 10.f });
@@ -152,7 +160,16 @@ void AccountsPageState::pollEvent()
 				break;
 			}
 
-			for (Account& acc : m_Accounts)
+			if (m_TextBoxSearch.isCursorOn(*g_Window))
+			{
+				m_TextBoxSearch.setSelected(true);
+			}
+			else
+			{
+				m_TextBoxSearch.setSelected(false);
+			}
+
+			for (Account* acc : m_VisibleAccounts)
 			{
 				enum : uint8_t
 				{
@@ -162,9 +179,9 @@ void AccountsPageState::pollEvent()
 				};
 				std::unordered_map<uint8_t, TextButton*> buttons;
 
-				buttons[MOSTRA] = &acc.getButtonView();
-				buttons[MODIFICA] = &acc.getButtonEdit();
-				buttons[ELIMINA] = &acc.getButtonDelete();
+				buttons[MOSTRA] = &acc->getButtonView();
+				buttons[MODIFICA] = &acc->getButtonEdit();
+				buttons[ELIMINA] = &acc->getButtonDelete();
 
 				for (uint8_t i = 0; i < buttons.size(); i++)
 				{
@@ -174,24 +191,24 @@ void AccountsPageState::pollEvent()
 						{
 						case MOSTRA:
 						{
-							m_NotifyViewAccount = Notify_ViewAccount("Account: " + acc.getAccountInfo().name);
+							m_NotifyViewAccount = Notify_ViewAccount("Account: " + acc->getAccountInfo().name);
 
 							std::stringstream contents;
-							contents << "\nNome utente:\n" << acc.getAccountInfo().username << "\n\nPassword:\n" << acc.getAccountInfo().password;
+							contents << "\nNome utente:\n" << acc->getAccountInfo().username << "\n\nPassword:\n" << acc->getAccountInfo().password;
 							m_NotifyViewAccount.setContents(contents.str());
 
 							m_NotifyViewAccount.setActive(true);
 						}
 						break;
 						case MODIFICA:
-							g_Machine.add(StateRef(new EditAccountState(acc.getAccountInfo())), false);
+							g_Machine.add(StateRef(new EditAccountState(acc->getAccountInfo())), false);
 							break;
 						case ELIMINA:
 						{
-							m_NotifyDeleteAccount = Notify_DeleteAccount(acc.getAccountInfo().name);
+							m_NotifyDeleteAccount = Notify_DeleteAccount(acc->getAccountInfo().name);
 
 							std::stringstream contents;
-							contents << "\nStai per eliminare:\n" << acc.getAccountInfo().name
+							contents << "\nStai per eliminare:\n" << acc->getAccountInfo().name
 								<< "\n\n\n(!) Questa operazione è irreversibile.";
 							m_NotifyDeleteAccount.setContents(contents.str());
 
@@ -219,8 +236,11 @@ void AccountsPageState::pollEvent()
 				}
 			}
 			break;
+		case sf::Event::TextEntered:
+			m_TextBoxSearch.onType(event);
+			break;
 		case sf::Event::MouseWheelScrolled:
-			if (m_Accounts.empty())
+			if (m_VisibleAccounts.empty())
 			{
 				break;
 			}
@@ -233,25 +253,25 @@ void AccountsPageState::pollEvent()
 
 				if (DELTA > 0.f)
 				{
-					for (uint16_t i = 0; i < m_Accounts.size(); i++)
+					for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
 					{
 						const float Y_DEFAULT = m_Background.getSize().y + 10.f + 110.f * i;
 
-						if (m_Accounts[i].getPosition().y != Y_DEFAULT)
+						if (m_VisibleAccounts[i]->getPosition().y != Y_DEFAULT)
 						{
-							m_Accounts[i].setPosition({ X_DEFAULT, m_Accounts[i].getPosition().y + Y_MOVE });
+							m_VisibleAccounts[i]->setPosition({ X_DEFAULT, m_VisibleAccounts[i]->getPosition().y + Y_MOVE });
 						}
 					}
 				}
 				else if (DELTA < 0.f)
 				{
-					for (uint16_t i = 0; i < m_Accounts.size(); i++)
+					for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
 					{
 						const float Y_DEFAULT = m_Background.getSize().y + 10.f + 110.f * i;
 
-						if (m_Accounts[i].getPosition().y <= Y_DEFAULT)
+						if (m_VisibleAccounts[i]->getPosition().y <= Y_DEFAULT)
 						{
-							m_Accounts[i].setPosition({ X_DEFAULT, m_Accounts[i].getPosition().y - Y_MOVE });
+							m_VisibleAccounts[i]->setPosition({ X_DEFAULT, m_VisibleAccounts[i]->getPosition().y - Y_MOVE });
 						}
 					}
 				}
@@ -263,20 +283,85 @@ void AccountsPageState::pollEvent()
 
 void AccountsPageState::update()
 {
+	m_TextBoxSearch.update();
+
+	static std::string search;
+	if (!m_TextBoxSearch.getBuff().empty())
+	{
+		if (search != m_TextBoxSearch.getBuff())
+		{
+			search = m_TextBoxSearch.getBuff();
+
+			m_VisibleAccounts.clear();
+
+			for (char& c : search)
+			{
+				c += c < 'A' || c > 'Z' ? 0 : 32;
+			}
+
+			for (Account& acc : m_Accounts)
+			{
+				std::string name = acc.getAccountInfo().name;
+
+				if (search.length() > name.length())
+				{
+					continue;
+				}
+
+				bool found = true;
+				for (int i = 0; i < search.length(); i++)
+				{
+					if (search[i] != name[i])
+					{
+						found = false;
+						break;
+					}
+				}
+
+				if (found)
+				{
+					m_VisibleAccounts.push_back(&acc);
+				}
+			}
+
+			for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
+			{
+				m_VisibleAccounts[i]->setPosition({ 10.f, m_Background.getSize().y + 10.f + 110.f * i });
+			}
+		}
+	}
+	else if (m_VisibleAccounts.size() != m_Accounts.size())
+	{
+		search = "";
+
+		m_VisibleAccounts.clear();
+		for (Account& acc : m_Accounts)
+		{
+			m_VisibleAccounts.push_back(&acc);
+		}
+
+		for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
+		{
+			m_VisibleAccounts[i]->setPosition({ 10.f, m_Background.getSize().y + 10.f + 110.f * i });
+		}
+	}
+
 }
 
 void AccountsPageState::render()
 {
 	g_Window->clear(WINDOW_BACKGROUND);
 
-	for (Account& acc : m_Accounts)
+	for (Account* acc : m_VisibleAccounts)
 	{
-		acc.render(g_Window);
+		acc->render(g_Window);
 	}
 
 	g_Window->draw(m_Background);
 
 	g_Window->draw(m_TextTitle);
+
+	m_TextBoxSearch.render(g_Window);
 
 	for (uint8_t i = 0; i < m_Buttons.size(); i++)
 	{

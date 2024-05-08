@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include "AccountInfo.h"
 #include "TextButton.h"
+#include "TextBox.h"
 #include "Notify.h"
 
 class AccountsPageState : public State
@@ -21,6 +22,7 @@ public:
 	void render();
 private:
 	sf::Text m_TextTitle;
+	TextBox m_TextBoxSearch;
 	sf::RectangleShape m_Background;
 
 	class Account
@@ -121,6 +123,7 @@ private:
 		TextButton m_ButtonDelete;
 	};
 	std::vector<Account> m_Accounts;
+	std::vector<Account*> m_VisibleAccounts;
 
 	std::unordered_map<uint8_t, TextButton> m_Buttons;
 	enum Button : uint8_t
