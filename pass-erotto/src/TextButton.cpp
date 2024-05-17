@@ -8,7 +8,7 @@ TextButton::TextButton(sf::Font& font, const std::string& title, const uint16_t&
 	m_Text.setCharacterSize(charSize);
 	m_Text.setFillColor(m_TextColor);
 
-	m_Background.setSize({ m_Text.getGlobalBounds().getSize().x + 10.f, (float)(charSize * 1.5f) });
+	m_Background.setSize({ m_Text.getGlobalBounds().getSize().x + 15.f, (float)(charSize * 1.5f) });
 
 	m_Background.setOutlineThickness(2.f);
 	m_Background.setOutlineColor(sf::Color(100, 100, 100));
@@ -36,7 +36,7 @@ void TextButton::setPosition(const sf::Vector2f& position)
 {
 	m_Background.setPosition(position);
 	m_HighlightShape.setPosition(position);
-	m_Text.setPosition(position.x + 5.f, position.y);
+	m_Text.setPosition(floor(position.x + (m_Background.getSize().x - m_Text.getGlobalBounds().getSize().x) / 2.f - 2.5f), position.y);
 }
 
 void TextButton::setHighlight(const bool& highlight)
