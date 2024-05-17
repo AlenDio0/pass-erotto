@@ -7,17 +7,23 @@ using namespace Data;
 
 PINState::PINState()
 {
+	const float X_AXISPOS = WINDOW_WIDTH / 2.f, Y_POS = WINDOW_HEIGTH / 6.f;
+
+	m_TextBoxPIN = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 16u);
+	m_TextBoxPIN.setPosition
+	({
+		X_AXISPOS - m_TextBoxPIN.getBackground().getSize().x / 2.f,
+		Y_POS + m_TextBoxPIN.getBackground().getSize().y * 2.f
+		});
+	m_TextBoxPIN.setPlaceHolder("PIN");
+
 	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, 35u);
-	m_TextInsertPIN.setPosition({ 25.f, WINDOW_HEIGTH / 6.f });
+	m_TextInsertPIN.setPosition({ m_TextBoxPIN.getBackground().getPosition().x, Y_POS });
 	m_TextInsertPIN.setStyle(sf::Text::Bold);
 	m_TextInsertPIN.setOutlineThickness(2.f);
 
-	m_TextBoxPIN = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 16u);
-	m_TextBoxPIN.setPosition({ 25.f, WINDOW_HEIGTH / 3.f });
-	m_TextBoxPIN.setPlaceHolder("PIN");
-
-	m_ButtonConfirm = TextButton(*WINDOW_FONT, "Conferma", 20u, sf::Color::Black);
-	m_ButtonConfirm.setPosition({ WINDOW_WIDTH - 150.f, WINDOW_HEIGTH / 1.25f });
+	m_ButtonConfirm = TextButton(*WINDOW_FONT, "Conferma", 40u, sf::Color::Black);
+	m_ButtonConfirm.setPosition({ X_AXISPOS - m_ButtonConfirm.getBackground().getSize().x / 2.f, WINDOW_HEIGTH / 1.5f });
 }
 
 void PINState::init()
@@ -140,7 +146,7 @@ void PINState::render()
 bool PINState::loadPIN()
 {
 	mINI::INIStructure ini;
-	SETTINGSDATAFILE.read(ini);
+	DATAFILE.read(ini);
 
 	if (ini["settings"]["pin"].empty())
 	{

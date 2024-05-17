@@ -60,6 +60,12 @@ void TextBox::setSelected(const bool& selected)
 	}
 }
 
+void TextBox::setString(const std::string& string)
+{
+	m_Buff.str("");
+	m_Buff << string;
+}
+
 bool TextBox::isCursorOn(const sf::WindowBase& window)
 {
 	return m_Background.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window));
@@ -75,6 +81,11 @@ void TextBox::onType(sf::Event input)
 	int typedChar = input.text.unicode;
 
 	if (typedChar >= 128)
+	{
+		return;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
 	{
 		return;
 	}

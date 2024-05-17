@@ -18,7 +18,7 @@ MainMenuState::MainMenuState()
 
 	m_Buttons[Button::ACCOUNTS] = TextButton(*WINDOW_FONT, "Accounts", CHAR_SIZE, sf::Color::Black);
 	m_Buttons[Button::IMPOSTAZIONI] = TextButton(*WINDOW_FONT, "Impostazioni ", CHAR_SIZE, sf::Color::Black);
-	m_Buttons[Button::AIUTO] = TextButton(*WINDOW_FONT, "Aiuto", CHAR_SIZE, sf::Color::Black);
+	//m_Buttons[Button::AIUTO] = TextButton(*WINDOW_FONT, "Aiuto", CHAR_SIZE, sf::Color::Black);
 	m_Buttons[Button::ESCI] = TextButton(*WINDOW_FONT, "Esci ", CHAR_SIZE, sf::Color::Black);
 
 	for (uint8_t i = 0; i < m_Buttons.size(); i++)

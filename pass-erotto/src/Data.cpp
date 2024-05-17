@@ -5,9 +5,7 @@ namespace Data
 	void INIT()
 	{
 		{
-			std::ofstream file(SETTINGSDATAFILE_NAME, std::ios::app);
-			file.close();
-			file.open(DATAFILE_NAME, std::ios::app);
+			std::ofstream file(DATAFILE_NAME, std::ios::app);
 		}
 
 

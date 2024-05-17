@@ -32,10 +32,9 @@ private:
 		inline Notify_WrongPIN()
 			: Notify(*Data::WINDOW_FONT, { 200.f, 100.f }, "PIN Sbagliato")
 		{
-			m_TextHeader.setCharacterSize(25u);
+			m_TextHeader.setCharacterSize(20u);
 			m_TextHeader.setStyle(sf::Text::Bold);
 
-			m_TextContents.setCharacterSize(20u);
 			setContents("");
 
 			m_Buttons[Button::OK] = TextButton(*Data::WINDOW_FONT, "Ok", 20u);
