@@ -7,29 +7,29 @@ using namespace Data;
 
 SettingsState::SettingsState()
 {
-	const uint8_t CHAR_SIZE = 50u;
-	const float X_POS = 25.f, Y_POS = 50.f;
+	const uint8_t CHAR_SIZE = 40u;
+	const float X_AXIS = WINDOW_WIDTH / 2.f, Y_POS = 150.f;
 	const float Y_SPACING = 50.f;
 
 	m_Buttons[Button::CAMBIAPIN] = TextButton(*WINDOW_FONT, "Cambia PIN ", CHAR_SIZE);
 	m_Buttons[Button::CAMBIAPIN].setPosition
 	({
-		X_POS,
+		X_AXIS - m_Buttons[Button::CAMBIAPIN].getBackground().getSize().x / 2.f,
 		Y_POS
 		});
 
 	m_Buttons[Button::RESET] = TextButton(*WINDOW_FONT, "RESET ", CHAR_SIZE);
 	m_Buttons[Button::RESET].setPosition
 	({
-		X_POS,
+		X_AXIS - m_Buttons[Button::RESET].getBackground().getSize().x / 2.f,
 		Y_POS + m_Buttons[Button::RESET].getBackground().getSize().y + Y_SPACING
 		});
 
-	m_Buttons[Button::RITORNA] = TextButton(*WINDOW_FONT, "Ritorna ", CHAR_SIZE);
-	m_Buttons[Button::RITORNA].setPosition
+	m_Buttons[Button::INDIETRO] = TextButton(*WINDOW_FONT, "< Indietro ", 25u);
+	m_Buttons[Button::INDIETRO].setPosition
 	({
-		WINDOW_WIDTH / 2.f - m_Buttons[Button::RITORNA].getBackground().getSize().x / 2.f,
-		WINDOW_HEIGTH - m_Buttons[Button::RITORNA].getBackground().getSize().y - 10.f
+		25.f,
+		25.f
 		});
 }
 
@@ -152,7 +152,7 @@ void SettingsState::pollEvent()
 						m_NotifyReset = Notify_Reset();
 						m_NotifyReset.setActive(true);
 						break;
-					case Button::RITORNA:
+					case Button::INDIETRO:
 						g_Machine.remove();
 						break;
 					}

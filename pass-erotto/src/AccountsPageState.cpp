@@ -28,8 +28,8 @@ AccountsPageState::AccountsPageState()
 	m_Buttons[Button::AGGIUNGI] = TextButton(*WINDOW_FONT, " + ", 30u, sf::Color::Black);
 	m_Buttons[Button::AGGIUNGI].setPosition({ WINDOW_WIDTH - m_Buttons[Button::AGGIUNGI].getBackground().getSize().x - 10.f, 10.f });
 
-	m_Buttons[Button::RITORNA] = TextButton(*WINDOW_FONT, " < ", 30u, sf::Color::Black);
-	m_Buttons[Button::RITORNA].setPosition({ 10.f, 10.f });
+	m_Buttons[Button::INDIETRO] = TextButton(*WINDOW_FONT, " < ", 30u, sf::Color::Black);
+	m_Buttons[Button::INDIETRO].setPosition({ 10.f, 10.f });
 }
 
 void AccountsPageState::init()
@@ -94,7 +94,7 @@ void AccountsPageState::pollEvent()
 			std::vector<TextButton*> buttons;
 
 			buttons.push_back(&m_Buttons[Button::AGGIUNGI]);
-			buttons.push_back(&m_Buttons[Button::RITORNA]);
+			buttons.push_back(&m_Buttons[Button::INDIETRO]);
 
 			for (Account& acc : m_Accounts)
 			{
@@ -229,7 +229,7 @@ void AccountsPageState::pollEvent()
 					case Button::AGGIUNGI:
 						g_Machine.add(StateRef(new AddAccountState()), false);
 						break;
-					case Button::RITORNA:
+					case Button::INDIETRO:
 						g_Machine.remove();
 						break;
 					}

@@ -4,30 +4,28 @@ using namespace Data;
 
 CreatePINState::CreatePINState()
 {
+	const uint8_t CHAR_SIZE = 40u;
+	const float X_AXISPOS = WINDOW_WIDTH / 2.f, Y_POS = WINDOW_HEIGTH / 6.f;
+
+	m_TextBoxPIN = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 16u);
+	m_TextBoxPIN.setPosition
+	({
+		X_AXISPOS - m_TextBoxPIN.getBackground().getSize().x / 2.f,
+		Y_POS + m_TextBoxPIN.getBackground().getSize().y * 2.f
+		});
+	m_TextBoxPIN.setPlaceHolder("Nuovo PIN");
+
 	m_TextInsertPIN = sf::Text("Crea il nuovo PIN:", *WINDOW_FONT, 30u);
-	m_TextInsertPIN.setPosition({ 25.f, WINDOW_HEIGTH / 6.f });
+	m_TextInsertPIN.setPosition({ m_TextBoxPIN.getBackground().getPosition().x, Y_POS });
 	m_TextInsertPIN.setStyle(sf::Text::Bold);
 	m_TextInsertPIN.setOutlineThickness(2.f);
 
-	m_TextBoxPIN = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 16u);
-	m_TextBoxPIN.setPosition({ 25.f, WINDOW_HEIGTH / 3.f });
-	m_TextBoxPIN.setPlaceHolder("Nuovo PIN");
+	m_Buttons[Button::ANNULLA] = TextButton(*WINDOW_FONT, "< Annulla ", 25u);
+	m_Buttons[Button::ANNULLA].setPosition({ 25.f, 25.f });
 
-	const uint8_t CHAR_SIZE = 40u;
-	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
-
-	m_Buttons[Button::ANNULLA] = TextButton(*WINDOW_FONT, "Annulla", CHAR_SIZE);
-	m_Buttons[Button::ANNULLA].setPosition
-	({
-		X_AXISPOS - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().x / 2.f,
-		WINDOW_HEIGTH - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().y - 50.f
-		});
 	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", CHAR_SIZE);
 	m_Buttons[Button::CONFERMA].setPosition
-	({
-		X_AXISPOS - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().x / 2.f,
-		m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getPosition().y - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().y - 50.f
-		});
+	({ X_AXISPOS - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().x / 2.f, WINDOW_HEIGTH / 1.5f });
 }
 
 void CreatePINState::init()

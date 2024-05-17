@@ -23,7 +23,7 @@ private:
 	{
 		CAMBIAPIN,
 		RESET,
-		RITORNA,
+		INDIETRO,
 	};
 
 	class Notify_Reset : public Notify

@@ -129,7 +129,7 @@ private:
 	enum Button : uint8_t
 	{
 		AGGIUNGI,
-		RITORNA,
+		INDIETRO,
 	};
 
 	class Notify_ViewAccount : public Notify
