@@ -85,6 +85,11 @@ void TextBox::onType(sf::Event input)
 		return;
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+	{
+		return;
+	}
+
 	while (isOverLimit())
 	{
 		if (typedChar == DELETE_KEY)
