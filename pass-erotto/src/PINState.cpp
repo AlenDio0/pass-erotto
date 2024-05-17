@@ -146,7 +146,7 @@ void PINState::render()
 bool PINState::loadPIN()
 {
 	mINI::INIStructure ini;
-	SETTINGSDATAFILE.read(ini);
+	DATAFILE.read(ini);
 
 	if (ini["settings"]["pin"].empty())
 	{

@@ -112,7 +112,6 @@ void SettingsState::pollEvent()
 							mINI::INIStructure ini;
 
 							DATAFILE.generate(ini);
-							SETTINGSDATAFILE.generate(ini);
 
 							m_NotifyClose = Notify_Close();
 							m_NotifyClose.setActive(true);

@@ -71,11 +71,11 @@ void CreatePINState::pollEvent()
 
 						{
 							mINI::INIStructure ini;
-							SETTINGSDATAFILE.read(ini);
+							DATAFILE.read(ini);
 
 							ini["settings"]["pin"] = m_TextBoxPIN.getBuff();
 
-							SETTINGSDATAFILE.write(ini);
+							DATAFILE.write(ini);
 
 							g_Machine.remove();
 						}

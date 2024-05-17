@@ -393,6 +393,11 @@ void AccountsPageState::loadAccounts()
 		const std::string& section = it.first;
 		const auto& collection = it.second;
 
+		if (section == "settings")
+		{
+			continue;
+		}
+
 		Account account;
 		account.setName(section);
 

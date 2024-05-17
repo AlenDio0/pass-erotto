@@ -64,6 +64,22 @@ void AddAccountState::pollEvent()
 			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
+			if (m_NotifyBadName.isActive())
+			{
+				TextButton& button = m_NotifyBadName.getButtons()[Notify_BadName::OK];
+
+				if (button.isCursorOn(*g_Window))
+				{
+					button.setHighlight(true);
+				}
+				else
+				{
+					button.setHighlight(false);
+				}
+
+				break;
+			}
+
 			for (uint8_t i = 0; i < m_Buttons.size(); i++)
 			{
 				if (m_Buttons[i].isCursorOn(*g_Window))
@@ -77,6 +93,16 @@ void AddAccountState::pollEvent()
 			}
 			break;
 		case sf::Event::MouseButtonPressed:
+			if (m_NotifyBadName.isActive())
+			{
+				if (m_NotifyBadName.getButtons()[Notify_BadName::OK].isCursorOn(*g_Window))
+				{
+					m_NotifyBadName.setActive(false);
+				}
+
+				break;
+			}
+
 			for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
 			{
 				if (m_TextBoxes[i].isCursorOn(*g_Window))
@@ -113,7 +139,7 @@ void AddAccountState::pollEvent()
 					break;
 					case Button::CONFERMA:
 					{
-						const std::string& nome = m_TextBoxes[Box::NOME].getBuff();
+						std::string nome = m_TextBoxes[Box::NOME].getBuff();
 						const std::string& nomeutente = m_TextBoxes[Box::NOMEUTENTE].getBuff();
 						const std::string& password = m_TextBoxes[Box::PASSWORD].getBuff();
 
@@ -130,6 +156,21 @@ void AddAccountState::pollEvent()
 									m_TextBoxes[i].getBackground().setOutlineColor(sf::Color(128, 128, 128));
 								}
 							}
+							break;
+						}
+
+						for (char& c : nome)
+						{
+							if (c >= 'A' && c <= 'Z')
+							{
+								c += 32;
+							}
+						}
+						if (nome == "settings")
+						{
+							m_NotifyBadName = Notify_BadName();
+							m_NotifyBadName.setActive(true);
+
 							break;
 						}
 
@@ -183,6 +224,11 @@ void AddAccountState::render()
 	for (uint8_t i = 0; i < m_Buttons.size(); i++)
 	{
 		m_Buttons[i].render(g_Window);
+	}
+
+	if (m_NotifyBadName.isActive())
+	{
+		m_NotifyBadName.render(g_Window);
 	}
 
 	g_Window->display();
