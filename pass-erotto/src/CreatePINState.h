@@ -27,5 +27,8 @@ private:
 		CONFERMA,
 		ANNULLA,
 	};
+
+	void onMouseMovement();
+	void onMouseButtonPressed();
 };
 

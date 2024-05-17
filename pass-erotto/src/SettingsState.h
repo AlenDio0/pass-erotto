@@ -60,7 +60,7 @@ private:
 				});
 
 			m_Buttons[Button::ANNULLA].setPosition
-			({ position.x + m_Buttons[Button::ANNULLA].getBackground().getSize().x + 10.f,
+			({ position.x + 10.f,
 				position.y + m_Background.getSize().y - m_Buttons[Button::ANNULLA].getBackground().getSize().y - 10.f
 				});
 		}
@@ -104,5 +104,8 @@ private:
 
 	};
 	Notify_Close m_NotifyClose;
+
+	void onMouseMovement();
+	void onMouseButtonPressed();
 };
 

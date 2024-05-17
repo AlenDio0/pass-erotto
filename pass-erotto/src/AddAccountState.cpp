@@ -64,134 +64,10 @@ void AddAccountState::pollEvent()
 			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
-			if (m_NotifyBadName.isActive())
-			{
-				TextButton& button = m_NotifyBadName.getButtons()[Notify_BadName::OK];
-
-				if (button.isCursorOn(*g_Window))
-				{
-					button.setHighlight(true);
-				}
-				else
-				{
-					button.setHighlight(false);
-				}
-
-				break;
-			}
-
-			for (uint8_t i = 0; i < m_Buttons.size(); i++)
-			{
-				if (m_Buttons[i].isCursorOn(*g_Window))
-				{
-					m_Buttons[i].setHighlight(true);
-				}
-				else
-				{
-					m_Buttons[i].setHighlight(false);
-				}
-			}
+			onMouseMovement();
 			break;
 		case sf::Event::MouseButtonPressed:
-			if (m_NotifyBadName.isActive())
-			{
-				if (m_NotifyBadName.getButtons()[Notify_BadName::OK].isCursorOn(*g_Window))
-				{
-					m_NotifyBadName.setActive(false);
-				}
-
-				break;
-			}
-
-			for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
-			{
-				if (m_TextBoxes[i].isCursorOn(*g_Window))
-				{
-					m_TextBoxes[i].setSelected(true);
-				}
-				else
-				{
-					m_TextBoxes[i].setSelected(false);
-				}
-			}
-
-			for (uint8_t i = 0; i < m_Buttons.size(); i++)
-			{
-				if (m_Buttons[i].isCursorOn(*g_Window))
-				{
-					switch (i)
-					{
-					case Button::GENERA:
-					{
-						std::string new_password;
-
-						for (int i = 0; i < 12; i++)
-						{
-							static const std::string usableChars = "0123456789!£$%&/()=?^[]QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
-							char c = usableChars[rand() % usableChars.length()];
-
-							new_password.push_back(c);
-						}
-
-						m_TextBoxes[Box::PASSWORD].setString(new_password);
-						m_TextBoxes[Box::PASSWORD].setSelected(true);
-					}
-					break;
-					case Button::CONFERMA:
-					{
-						std::string nome = m_TextBoxes[Box::NOME].getBuff();
-						const std::string& nomeutente = m_TextBoxes[Box::NOMEUTENTE].getBuff();
-						const std::string& password = m_TextBoxes[Box::PASSWORD].getBuff();
-
-						if (nome.empty() || nomeutente.empty() || password.empty())
-						{
-							for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
-							{
-								if (m_TextBoxes[i].getBuff().empty())
-								{
-									m_TextBoxes[i].getBackground().setOutlineColor(sf::Color::Red);
-								}
-								else
-								{
-									m_TextBoxes[i].getBackground().setOutlineColor(sf::Color(128, 128, 128));
-								}
-							}
-							break;
-						}
-
-						for (char& c : nome)
-						{
-							if (c >= 'A' && c <= 'Z')
-							{
-								c += 32;
-							}
-						}
-						if (nome == "settings")
-						{
-							m_NotifyBadName = Notify_BadName();
-							m_NotifyBadName.setActive(true);
-
-							break;
-						}
-
-						mINI::INIStructure ini;
-						DATAFILE.read(ini);
-
-						ini[nome].set
-						({
-							{ "nome", nomeutente },
-							{ "pass", password }
-							});
-						DATAFILE.write(ini);
-					}
-					g_Machine.remove();
-					break;
-					case Button::ANNULLA:
-						g_Machine.remove();
-						break;
-					}
-				}
-			}
+			onMouseButtonPressed();
 			break;
 		case sf::Event::TextEntered:
 			for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
@@ -232,4 +108,145 @@ void AddAccountState::render()
 	}
 
 	g_Window->display();
+}
+
+void AddAccountState::onMouseMovement()
+{
+	if (m_NotifyBadName.isActive())
+	{
+		TextButton& button = m_NotifyBadName.getButtons()[Notify_BadName::OK];
+
+		if (button.isCursorOn(*g_Window))
+		{
+			button.setHighlight(true);
+		}
+		else
+		{
+			button.setHighlight(false);
+		}
+
+		return;
+	}
+
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		if (m_Buttons[i].isCursorOn(*g_Window))
+		{
+			m_Buttons[i].setHighlight(true);
+		}
+		else
+		{
+			m_Buttons[i].setHighlight(false);
+		}
+	}
+}
+
+void AddAccountState::onMouseButtonPressed()
+{
+	if (m_NotifyBadName.isActive())
+	{
+		if (m_NotifyBadName.getButtons()[Notify_BadName::OK].isCursorOn(*g_Window))
+		{
+			m_NotifyBadName.setActive(false);
+		}
+
+		return;
+	}
+
+	for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
+	{
+		if (m_TextBoxes[i].isCursorOn(*g_Window))
+		{
+			m_TextBoxes[i].setSelected(true);
+		}
+		else
+		{
+			m_TextBoxes[i].setSelected(false);
+		}
+	}
+
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		if (m_Buttons[i].isCursorOn(*g_Window))
+		{
+			switch (i)
+			{
+			case Button::GENERA:
+				onGenerateButton();
+				break;
+			case Button::CONFERMA:
+				onConfirmButton();
+				break;
+			case Button::ANNULLA:
+				g_Machine.remove();
+				break;
+			}
+		}
+	}
+}
+
+void AddAccountState::onGenerateButton()
+{
+	std::string new_password;
+
+	for (int i = 0; i < 12; i++)
+	{
+		static const std::string usableChars = "0123456789!£$%&/()=?^[]QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+		char c = usableChars[rand() % usableChars.length()];
+
+		new_password.push_back(c);
+	}
+
+	m_TextBoxes[Box::PASSWORD].setString(new_password);
+	m_TextBoxes[Box::PASSWORD].setSelected(true);
+}
+
+void AddAccountState::onConfirmButton()
+{
+	std::string nome = m_TextBoxes[Box::NOME].getBuff();
+	const std::string& nomeutente = m_TextBoxes[Box::NOMEUTENTE].getBuff();
+	const std::string& password = m_TextBoxes[Box::PASSWORD].getBuff();
+
+	if (nome.empty() || nomeutente.empty() || password.empty())
+	{
+		for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
+		{
+			if (m_TextBoxes[i].getBuff().empty())
+			{
+				m_TextBoxes[i].getBackground().setOutlineColor(sf::Color::Red);
+			}
+			else
+			{
+				m_TextBoxes[i].getBackground().setOutlineColor(sf::Color(128, 128, 128));
+			}
+		}
+		return;
+	}
+
+	for (char& c : nome)
+	{
+		if (c >= 'A' && c <= 'Z')
+		{
+			c += 32;
+		}
+	}
+	if (nome == "settings")
+	{
+		m_NotifyBadName = Notify_BadName();
+		m_NotifyBadName.setActive(true);
+
+		return;
+	}
+
+	mINI::INIStructure ini;
+	DATAFILE.read(ini);
+
+	ini[nome].set
+	({
+		{ "nome", nomeutente },
+		{ "pass", password }
+		});
+	DATAFILE.write(ini);
+
+	g_Machine.remove();
 }

@@ -20,7 +20,7 @@ CreatePINState::CreatePINState()
 	m_TextInsertPIN.setStyle(sf::Text::Bold);
 	m_TextInsertPIN.setOutlineThickness(2.f);
 
-	m_Buttons[Button::ANNULLA] = TextButton(*WINDOW_FONT, "< Annulla ", 25u);
+	m_Buttons[Button::ANNULLA] = TextButton(*WINDOW_FONT, "< Annulla", 25u);
 	m_Buttons[Button::ANNULLA].setPosition({ 25.f, 25.f });
 
 	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", CHAR_SIZE);
@@ -43,58 +43,10 @@ void CreatePINState::pollEvent()
 			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
-			for (uint8_t i = 0; i < m_Buttons.size(); i++)
-			{
-				if (m_Buttons[i].isCursorOn(*g_Window))
-				{
-					m_Buttons[i].setHighlight(true);
-				}
-				else
-				{
-					m_Buttons[i].setHighlight(false);
-				}
-			}
+			onMouseMovement();
 			break;
 		case sf::Event::MouseButtonPressed:
-			for (uint8_t i = 0; i < m_Buttons.size(); i++)
-			{
-				if (m_Buttons[i].isCursorOn(*g_Window))
-				{
-					switch (i)
-					{
-					case Button::CONFERMA:
-						if (m_TextBoxPIN.getBuff().empty())
-						{
-							m_TextBoxPIN.getBackground().setOutlineColor(sf::Color::Red);
-							break;
-						}
-
-						{
-							mINI::INIStructure ini;
-							DATAFILE.read(ini);
-
-							ini["settings"]["pin"] = m_TextBoxPIN.getBuff();
-
-							DATAFILE.write(ini);
-
-							g_Machine.remove();
-						}
-						break;
-					case Button::ANNULLA:
-						g_Machine.remove();
-						break;
-					}
-				}
-			}
-
-			if (m_TextBoxPIN.isCursorOn(*g_Window))
-			{
-				m_TextBoxPIN.setSelected(true);
-			}
-			else
-			{
-				m_TextBoxPIN.setSelected(false);
-			}
+			onMouseButtonPressed();
 			break;
 		case sf::Event::TextEntered:
 			m_TextBoxPIN.onType(event);
@@ -122,4 +74,62 @@ void CreatePINState::render()
 	}
 
 	g_Window->display();
+}
+
+void CreatePINState::onMouseMovement()
+{
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		if (m_Buttons[i].isCursorOn(*g_Window))
+		{
+			m_Buttons[i].setHighlight(true);
+		}
+		else
+		{
+			m_Buttons[i].setHighlight(false);
+		}
+	}
+}
+
+void CreatePINState::onMouseButtonPressed()
+{
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		if (m_Buttons[i].isCursorOn(*g_Window))
+		{
+			switch (i)
+			{
+			case Button::CONFERMA:
+				if (m_TextBoxPIN.getBuff().empty())
+				{
+					m_TextBoxPIN.getBackground().setOutlineColor(sf::Color::Red);
+					break;
+				}
+
+				{
+					mINI::INIStructure ini;
+					DATAFILE.read(ini);
+
+					ini["settings"]["pin"] = m_TextBoxPIN.getBuff();
+
+					DATAFILE.write(ini);
+
+					g_Machine.remove();
+				}
+				break;
+			case Button::ANNULLA:
+				g_Machine.remove();
+				break;
+			}
+		}
+	}
+
+	if (m_TextBoxPIN.isCursorOn(*g_Window))
+	{
+		m_TextBoxPIN.setSelected(true);
+	}
+	else
+	{
+		m_TextBoxPIN.setSelected(false);
+	}
 }

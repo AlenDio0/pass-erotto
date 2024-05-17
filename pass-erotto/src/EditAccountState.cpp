@@ -58,114 +58,10 @@ void EditAccountState::pollEvent()
 			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
-			if (m_NotifyBadName.isActive())
-			{
-				TextButton& button = m_NotifyBadName.getButtons()[Notify_BadName::OK];
-
-				if (button.isCursorOn(*g_Window))
-				{
-					button.setHighlight(true);
-				}
-				else
-				{
-					button.setHighlight(false);
-				}
-
-				break;
-			}
-
-			for (uint8_t i = 0; i < m_Buttons.size(); i++)
-			{
-				if (m_Buttons[i].isCursorOn(*g_Window))
-				{
-					m_Buttons[i].setHighlight(true);
-				}
-				else
-				{
-					m_Buttons[i].setHighlight(false);
-				}
-			}
+			onMouseMovement();
 			break;
 		case sf::Event::MouseButtonPressed:
-			if (m_NotifyBadName.isActive())
-			{
-				if (m_NotifyBadName.getButtons()[Notify_BadName::OK].isCursorOn(*g_Window))
-				{
-					m_NotifyBadName.setActive(false);
-				}
-
-				break;
-			}
-
-			for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
-			{
-				if (m_TextBoxes[i].isCursorOn(*g_Window))
-				{
-					m_TextBoxes[i].setSelected(true);
-				}
-				else
-				{
-					m_TextBoxes[i].setSelected(false);
-				}
-			}
-
-			for (uint8_t i = 0; i < m_Buttons.size(); i++)
-			{
-				if (m_Buttons[i].isCursorOn(*g_Window))
-				{
-					switch (i)
-					{
-					case Button::CONFERMA:
-					{
-						AccountInfo info;
-
-						info.name =
-							m_TextBoxes[Box::NOME].getBuff().empty() ? m_OriginalAccountInfo.name : m_TextBoxes[Box::NOME].getBuff();
-
-						info.username =
-							m_TextBoxes[Box::NOMEUTENTE].getBuff().empty() ? m_OriginalAccountInfo.username : m_TextBoxes[Box::NOMEUTENTE].getBuff();
-
-						info.password =
-							m_TextBoxes[Box::PASSWORD].getBuff().empty() ? m_OriginalAccountInfo.password : m_TextBoxes[Box::PASSWORD].getBuff();
-
-						for (char& c : info.name)
-						{
-							if (c >= 'A' && c <= 'Z')
-							{
-								c += 32;
-							}
-						}
-						if (info.name == "settings")
-						{
-							m_NotifyBadName = Notify_BadName();
-							m_NotifyBadName.setActive(true);
-
-							break;
-						}
-
-						mINI::INIStructure ini;
-						DATAFILE.read(ini);
-
-						if (info.name != m_OriginalAccountInfo.name)
-						{
-							ini.remove(m_OriginalAccountInfo.name);
-						}
-
-						ini[info.name].set
-						({
-							{ "nome", info.username },
-							{ "pass", info.password }
-							});
-						DATAFILE.write(ini);
-					}
-					g_Machine.remove();
-					break;
-					case Button::ANNULLA:
-						g_Machine.remove();
-						break;
-					}
-				}
-			}
+			onMouseButtonPressed();
 			break;
 		case sf::Event::TextEntered:
 			for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
@@ -206,4 +102,119 @@ void EditAccountState::render()
 	}
 
 	g_Window->display();
+}
+
+void EditAccountState::onMouseMovement()
+{
+	if (m_NotifyBadName.isActive())
+	{
+		TextButton& button = m_NotifyBadName.getButtons()[Notify_BadName::OK];
+
+		if (button.isCursorOn(*g_Window))
+		{
+			button.setHighlight(true);
+		}
+		else
+		{
+			button.setHighlight(false);
+		}
+
+		return;
+	}
+
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		if (m_Buttons[i].isCursorOn(*g_Window))
+		{
+			m_Buttons[i].setHighlight(true);
+		}
+		else
+		{
+			m_Buttons[i].setHighlight(false);
+		}
+	}
+}
+
+void EditAccountState::onMouseButtonPressed()
+{
+	if (m_NotifyBadName.isActive())
+	{
+		if (m_NotifyBadName.getButtons()[Notify_BadName::OK].isCursorOn(*g_Window))
+		{
+			m_NotifyBadName.setActive(false);
+		}
+
+		return;
+	}
+
+	for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
+	{
+		if (m_TextBoxes[i].isCursorOn(*g_Window))
+		{
+			m_TextBoxes[i].setSelected(true);
+		}
+		else
+		{
+			m_TextBoxes[i].setSelected(false);
+		}
+	}
+
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		if (m_Buttons[i].isCursorOn(*g_Window))
+		{
+			switch (i)
+			{
+			case Button::CONFERMA:
+				onConfirmButton();
+				break;
+			case Button::ANNULLA:
+				g_Machine.remove();
+				break;
+			}
+		}
+	}
+}
+
+void EditAccountState::onConfirmButton()
+{
+	AccountInfo info;
+
+	info.name = m_TextBoxes[Box::NOME].getBuff().empty() ? m_OriginalAccountInfo.name : m_TextBoxes[Box::NOME].getBuff();
+
+	info.username = m_TextBoxes[Box::NOMEUTENTE].getBuff().empty() ? m_OriginalAccountInfo.username : m_TextBoxes[Box::NOMEUTENTE].getBuff();
+
+	info.password = m_TextBoxes[Box::PASSWORD].getBuff().empty() ? m_OriginalAccountInfo.password : m_TextBoxes[Box::PASSWORD].getBuff();
+
+	for (char& c : info.name)
+	{
+		if (c >= 'A' && c <= 'Z')
+		{
+			c += 32;
+		}
+	}
+	if (info.name == "settings")
+	{
+		m_NotifyBadName = Notify_BadName();
+		m_NotifyBadName.setActive(true);
+
+		return;
+	}
+
+	mINI::INIStructure ini;
+	DATAFILE.read(ini);
+
+	if (info.name != m_OriginalAccountInfo.name)
+	{
+		ini.remove(m_OriginalAccountInfo.name);
+	}
+
+	ini[info.name].set
+	({
+		{ "nome", info.username },
+		{ "pass", info.password }
+		});
+	DATAFILE.write(ini);
+
+	g_Machine.remove();
 }

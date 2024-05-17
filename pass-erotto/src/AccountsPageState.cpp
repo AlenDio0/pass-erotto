@@ -7,12 +7,16 @@ using namespace Data;
 
 AccountsPageState::AccountsPageState()
 {
-	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, 40u);
-	m_TextTitle.setPosition(WINDOW_WIDTH / 2.f - m_TextTitle.getGlobalBounds().getSize().x / 2.f, 0.f);
+	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
+	const float X_POS = 10.f, Y_POS = 10.f;
+	const float BACKGROUND_SIZE_Y = 110.f;
+
+	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, 38u);
+	m_TextTitle.setPosition(X_AXISPOS - m_TextTitle.getGlobalBounds().getSize().x / 2.f, Y_POS / 2.f);
 	m_TextTitle.setOutlineThickness(2.f);
 	m_TextTitle.setOutlineColor(sf::Color::Black);
 
-	m_Background = sf::RectangleShape({ WINDOW_WIDTH, 120.f });
+	m_Background = sf::RectangleShape({ WINDOW_WIDTH, BACKGROUND_SIZE_Y });
 	m_Background.setFillColor(sf::Color::Blue);
 	m_Background.setOutlineThickness(4.f);
 	m_Background.setOutlineColor(sf::Color::Black);
@@ -20,16 +24,16 @@ AccountsPageState::AccountsPageState()
 	m_TextBoxSearch = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 14u);
 	m_TextBoxSearch.setPosition
 	({
-		WINDOW_WIDTH / 2.f - m_TextBoxSearch.getBackground().getSize().x / 2.f,
-		m_Background.getSize().y - m_TextBoxSearch.getBackground().getSize().y - 10.f
+		X_AXISPOS - m_TextBoxSearch.getBackground().getSize().x / 2.f,
+		BACKGROUND_SIZE_Y - m_TextBoxSearch.getBackground().getSize().y - 10.f
 		});
 	m_TextBoxSearch.setPlaceHolder("Cerca...");
 
 	m_Buttons[Button::AGGIUNGI] = TextButton(*WINDOW_FONT, " + ", 30u, sf::Color::Black);
-	m_Buttons[Button::AGGIUNGI].setPosition({ WINDOW_WIDTH - m_Buttons[Button::AGGIUNGI].getBackground().getSize().x - 10.f, 10.f });
+	m_Buttons[Button::AGGIUNGI].setPosition({ WINDOW_WIDTH - m_Buttons[Button::AGGIUNGI].getBackground().getSize().x - X_POS, Y_POS });
 
 	m_Buttons[Button::INDIETRO] = TextButton(*WINDOW_FONT, " < ", 30u, sf::Color::Black);
-	m_Buttons[Button::INDIETRO].setPosition({ 10.f, 10.f });
+	m_Buttons[Button::INDIETRO].setPosition({ X_POS, Y_POS });
 }
 
 void AccountsPageState::init()

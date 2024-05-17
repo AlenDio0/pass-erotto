@@ -72,4 +72,9 @@ private:
 
 	};
 	Notify_BadName m_NotifyBadName;
+
+	void onMouseMovement();
+	void onMouseButtonPressed();
+
+	void onConfirmButton();
 };

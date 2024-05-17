@@ -7,25 +7,25 @@ using namespace Data;
 
 SettingsState::SettingsState()
 {
-	const uint8_t CHAR_SIZE = 40u;
+	const uint8_t CHAR_SIZE1 = 40u, CHAR_SIZE2 = 25u;
 	const float X_AXIS = WINDOW_WIDTH / 2.f, Y_POS = 150.f;
 	const float Y_SPACING = 50.f;
 
-	m_Buttons[Button::CAMBIAPIN] = TextButton(*WINDOW_FONT, "Cambia PIN ", CHAR_SIZE);
+	m_Buttons[Button::CAMBIAPIN] = TextButton(*WINDOW_FONT, "Cambia PIN", CHAR_SIZE1);
 	m_Buttons[Button::CAMBIAPIN].setPosition
 	({
 		X_AXIS - m_Buttons[Button::CAMBIAPIN].getBackground().getSize().x / 2.f,
 		Y_POS
 		});
 
-	m_Buttons[Button::RESET] = TextButton(*WINDOW_FONT, "RESET ", CHAR_SIZE);
+	m_Buttons[Button::RESET] = TextButton(*WINDOW_FONT, "RESET", CHAR_SIZE1);
 	m_Buttons[Button::RESET].setPosition
 	({
 		X_AXIS - m_Buttons[Button::RESET].getBackground().getSize().x / 2.f,
 		Y_POS + m_Buttons[Button::RESET].getBackground().getSize().y + Y_SPACING
 		});
 
-	m_Buttons[Button::INDIETRO] = TextButton(*WINDOW_FONT, "< Indietro ", 25u);
+	m_Buttons[Button::INDIETRO] = TextButton(*WINDOW_FONT, "< Indietro", CHAR_SIZE2);
 	m_Buttons[Button::INDIETRO].setPosition
 	({
 		25.f,
@@ -48,115 +48,10 @@ void SettingsState::pollEvent()
 			g_Window->close();
 			break;
 		case sf::Event::MouseMoved:
-			if (m_NotifyReset.isActive())
-			{
-				auto& buttons = m_NotifyReset.getButtons();
-
-				for (uint8_t i = 0; i < buttons.size(); i++)
-				{
-					TextButton& button = buttons[i];
-					if (button.isCursorOn(*g_Window))
-					{
-						button.setHighlight(true);
-					}
-					else
-					{
-						button.setHighlight(false);
-					}
-				}
-
-				break;
-			}
-
-			if (m_NotifyClose.isActive())
-			{
-				TextButton& button = m_NotifyClose.getButtons()[Notify_Close::OK];
-
-				if (button.isCursorOn(*g_Window))
-				{
-					button.setHighlight(true);
-				}
-				else
-				{
-					button.setHighlight(false);
-				}
-
-				break;
-			}
-
-			for (uint8_t i = 0; i < m_Buttons.size(); i++)
-			{
-				if (m_Buttons[i].isCursorOn(*g_Window))
-				{
-					m_Buttons[i].setHighlight(true);
-				}
-				else
-				{
-					m_Buttons[i].setHighlight(false);
-				}
-			}
+			onMouseMovement();
 			break;
 		case sf::Event::MouseButtonPressed:
-			if (m_NotifyReset.isActive())
-			{
-				auto& buttons = m_NotifyReset.getButtons();
-
-				for (uint8_t i = 0; i < buttons.size(); i++)
-				{
-					if (buttons[i].isCursorOn(*g_Window))
-					{
-						switch (i)
-						{
-						case Notify_Reset::CONFERMA:
-						{
-							mINI::INIStructure ini;
-
-							DATAFILE.generate(ini);
-
-							m_NotifyClose = Notify_Close();
-							m_NotifyClose.setActive(true);
-						}
-						break;
-						case Notify_Reset::ANNULLA:
-							break;
-						}
-
-						m_NotifyReset.setActive(false);
-					}
-				}
-
-				break;
-			}
-
-			if (m_NotifyClose.isActive())
-			{
-				if (m_NotifyClose.getButtons()[Notify_Close::OK].isCursorOn(*g_Window))
-				{
-					g_Window->close();
-				}
-
-				break;
-			}
-
-			for (uint8_t i = 0; i < m_Buttons.size(); i++)
-			{
-				if (m_Buttons[i].isCursorOn(*g_Window))
-				{
-					switch (i)
-					{
-					case Button::CAMBIAPIN:
-						g_Machine.add(StateRef(new CreatePINState()), false);
-						break;
-					case Button::RESET:
-						m_NotifyReset = Notify_Reset();
-						m_NotifyReset.setActive(true);
-						break;
-					case Button::INDIETRO:
-						g_Machine.remove();
-						break;
-					}
-				}
-			}
+			onMouseButtonPressed();
 			break;
 		}
 	}
@@ -186,4 +81,119 @@ void SettingsState::render()
 	}
 
 	g_Window->display();
+}
+
+void SettingsState::onMouseMovement()
+{
+	if (m_NotifyReset.isActive())
+	{
+		auto& buttons = m_NotifyReset.getButtons();
+
+		for (uint8_t i = 0; i < buttons.size(); i++)
+		{
+			TextButton& button = buttons[i];
+			if (button.isCursorOn(*g_Window))
+			{
+				button.setHighlight(true);
+			}
+			else
+			{
+				button.setHighlight(false);
+			}
+		}
+
+		return;
+	}
+
+	if (m_NotifyClose.isActive())
+	{
+		TextButton& button = m_NotifyClose.getButtons()[Notify_Close::OK];
+
+		if (button.isCursorOn(*g_Window))
+		{
+			button.setHighlight(true);
+		}
+		else
+		{
+			button.setHighlight(false);
+		}
+
+		return;
+	}
+
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		if (m_Buttons[i].isCursorOn(*g_Window))
+		{
+			m_Buttons[i].setHighlight(true);
+		}
+		else
+		{
+			m_Buttons[i].setHighlight(false);
+		}
+	}
+}
+
+void SettingsState::onMouseButtonPressed()
+{
+	if (m_NotifyReset.isActive())
+	{
+		auto& buttons = m_NotifyReset.getButtons();
+
+		for (uint8_t i = 0; i < buttons.size(); i++)
+		{
+			if (buttons[i].isCursorOn(*g_Window))
+			{
+				switch (i)
+				{
+				case Notify_Reset::CONFERMA:
+				{
+					mINI::INIStructure ini;
+
+					DATAFILE.generate(ini);
+
+					m_NotifyClose = Notify_Close();
+					m_NotifyClose.setActive(true);
+				}
+				break;
+				case Notify_Reset::ANNULLA:
+					break;
+				}
+
+				m_NotifyReset.setActive(false);
+			}
+		}
+
+		return;
+	}
+
+	if (m_NotifyClose.isActive())
+	{
+		if (m_NotifyClose.getButtons()[Notify_Close::OK].isCursorOn(*g_Window))
+		{
+			g_Window->close();
+		}
+
+		return;
+	}
+
+	for (uint8_t i = 0; i < m_Buttons.size(); i++)
+	{
+		if (m_Buttons[i].isCursorOn(*g_Window))
+		{
+			switch (i)
+			{
+			case Button::CAMBIAPIN:
+				g_Machine.add(StateRef(new CreatePINState()), false);
+				break;
+			case Button::RESET:
+				m_NotifyReset = Notify_Reset();
+				m_NotifyReset.setActive(true);
+				break;
+			case Button::INDIETRO:
+				g_Machine.remove();
+				break;
+			}
+		}
+	}
 }

@@ -61,5 +61,8 @@ private:
 	};
 	Notify_WrongPIN m_NotifyWrongPIN;
 
+	void onMouseMovement();
+	void onMouseButtonPressed();
+
 	bool loadPIN();
 };

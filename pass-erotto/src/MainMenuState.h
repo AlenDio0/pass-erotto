@@ -27,5 +27,8 @@ private:
 		AIUTO,
 		ESCI,
 	};
+
+	void onMouseMovement();
+	void onMouseButtonPressed();
 };
 
