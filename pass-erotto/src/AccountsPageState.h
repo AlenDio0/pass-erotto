@@ -30,15 +30,17 @@ private:
 	public:
 		inline Account()
 		{
-			m_TextName = sf::Text("", *Data::WINDOW_FONT, 18u);
+			const uint8_t CHAR_SIZE1 = 18u, CHAR_SIZE2 = 16u;
+
+			m_TextName = sf::Text("", *Data::WINDOW_FONT, CHAR_SIZE1);
 			m_TextName.setFillColor(sf::Color::Black);
 			m_Background = sf::RectangleShape({ Data::WINDOW_WIDTH - 100.f, 100.f });
 			m_Background.setOutlineThickness(3.f);
 			m_Background.setOutlineColor(sf::Color(128, 128, 128));
 
-			m_ButtonView = TextButton(*Data::WINDOW_FONT, "Mostra", 19u, sf::Color::Black);
-			m_ButtonEdit = TextButton(*Data::WINDOW_FONT, "Modifica", 19u, sf::Color::Black);
-			m_ButtonDelete = TextButton(*Data::WINDOW_FONT, "Elimina", 19u, sf::Color::Red);
+			m_ButtonView = TextButton(*Data::WINDOW_FONT, "Mostra", CHAR_SIZE2, sf::Color::Black);
+			m_ButtonEdit = TextButton(*Data::WINDOW_FONT, "Modifica", CHAR_SIZE2, sf::Color::Black);
+			m_ButtonDelete = TextButton(*Data::WINDOW_FONT, "Elimina", CHAR_SIZE2, sf::Color::Red);
 
 			setPosition({ 0.f, 0.f });
 		}
@@ -59,6 +61,11 @@ private:
 		inline const AccountInfo& getAccountInfo()
 		{
 			return m_AccountInfo;
+		}
+
+		inline const sf::Vector2f& getSize()
+		{
+			return m_Background.getSize();
 		}
 
 		inline const sf::Vector2f& getPosition()
@@ -82,26 +89,18 @@ private:
 
 		inline void setPosition(const sf::Vector2f& position)
 		{
+			const float OFFSET = 10.f;
+			const float X_SPACING = 25.f;
+			const float Y_POS = position.y + m_Background.getSize().y - m_ButtonDelete.getBackground().getSize().y - OFFSET;
+
 			m_Background.setPosition(position);
 			m_TextName.setPosition(position.x + 10.f, position.y + 10.f);
 
-			m_ButtonDelete.setPosition
-			({
-				m_Background.getSize().x - m_ButtonDelete.getBackground().getSize().x,
-				position.y + m_Background.getSize().y - m_ButtonDelete.getBackground().getSize().y - 10.f
-				});
+			m_ButtonDelete.setPosition({ position.x + m_Background.getSize().x - m_ButtonDelete.getBackground().getSize().x - OFFSET, Y_POS });
 
-			m_ButtonEdit.setPosition
-			({
-				m_ButtonDelete.getBackground().getPosition().x - m_ButtonEdit.getBackground().getSize().x - 25.f,
-				position.y + m_Background.getSize().y - m_ButtonEdit.getBackground().getSize().y - 10.f
-				});
+			m_ButtonEdit.setPosition({ m_ButtonDelete.getBackground().getPosition().x - m_ButtonEdit.getBackground().getSize().x - X_SPACING, Y_POS });
 
-			m_ButtonView.setPosition
-			({
-				m_ButtonEdit.getBackground().getPosition().x - m_ButtonView.getBackground().getSize().x - 25.f,
-				position.y + m_Background.getSize().y - m_ButtonView.getBackground().getSize().y - 10.f
-				});
+			m_ButtonView.setPosition({ m_ButtonEdit.getBackground().getPosition().x - m_ButtonView.getBackground().getSize().x - X_SPACING, Y_POS });
 		}
 
 		inline void render(sf::RenderTarget* target)
@@ -215,6 +214,13 @@ private:
 		std::string m_AccountName;
 	};
 	Notify_DeleteAccount m_NotifyDeleteAccount;
+
+	void onMouseMovement();
+	void onMouseButtonPressed();
+
+	void onScrollPage(const sf::Event& event);
+
+	void onSearch(const std::string& search);
 
 	void loadAccounts();
 };

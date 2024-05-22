@@ -14,12 +14,12 @@ class AddAccountState : public State
 public:
 	AddAccountState();
 
-	void init();
+	virtual void init();
 
 	void pollEvent();
 	void update();
 	void render();
-private:
+protected:
 	std::unordered_map<uint8_t, sf::Text> m_Texts;
 	std::unordered_map<uint8_t, TextBox> m_TextBoxes;
 	enum Box : uint8_t
@@ -76,6 +76,6 @@ private:
 	void onMouseButtonPressed();
 
 	void onGenerateButton();
-	void onConfirmButton();
+	virtual void onConfirmButton();
 };
 
