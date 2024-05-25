@@ -8,6 +8,7 @@ using namespace Data;
 #define ACCOUNT_XPOS(size) (WINDOW_WIDTH / 2.f - size / 2.f)
 
 AccountsPageState::AccountsPageState()
+	: m_AccountDeleteName(NULL)
 {
 	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
 	const float X_POS = 10.f, Y_POS = 10.f;
@@ -131,14 +132,9 @@ void AccountsPageState::render()
 		m_Buttons[i].render(g_Window);
 	}
 
-	if (m_NotifyViewAccount.isActive())
+	if (MessageBox::isActive())
 	{
-		m_NotifyViewAccount.render(g_Window);
-	}
-
-	if (m_NotifyDeleteAccount.isActive())
-	{
-		m_NotifyDeleteAccount.render(g_Window);
+		MessageBox::render(g_Window);
 	}
 
 	g_Window->display();
@@ -146,36 +142,19 @@ void AccountsPageState::render()
 
 void AccountsPageState::onMouseMovement()
 {
-	if (m_NotifyViewAccount.isActive())
+	if (MessageBox::isActive())
 	{
-		TextButton& button = m_NotifyViewAccount.getButtons()[Notify_ViewAccount::OK];
-
-		if (button.isCursorOn(*g_Window))
-		{
-			button.setHighlight(true);
-		}
-		else
-		{
-			button.setHighlight(false);
-		}
-
-		return;
-	}
-
-	if (m_NotifyDeleteAccount.isActive())
-	{
-		auto& buttons = m_NotifyDeleteAccount.getButtons();
+		auto& buttons = MessageBox::getButtons();
 
 		for (uint8_t i = 0; i < buttons.size(); i++)
 		{
-			TextButton& button = buttons[i];
-			if (button.isCursorOn(*g_Window))
+			if (buttons[i].isCursorOn(*g_Window))
 			{
-				button.setHighlight(true);
+				buttons[i].setHighlight(true);
 			}
 			else
 			{
-				button.setHighlight(false);
+				buttons[i].setHighlight(false);
 			}
 		}
 
@@ -209,19 +188,9 @@ void AccountsPageState::onMouseMovement()
 
 void AccountsPageState::onMouseButtonPressed()
 {
-	if (m_NotifyViewAccount.isActive())
+	if (MessageBox::isActive())
 	{
-		if (m_NotifyViewAccount.getButtons()[Notify_ViewAccount::OK].isCursorOn(*g_Window))
-		{
-			m_NotifyViewAccount.setActive(false);
-		}
-
-		return;
-	}
-
-	if (m_NotifyDeleteAccount.isActive())
-	{
-		auto& buttons = m_NotifyDeleteAccount.getButtons();
+		auto& buttons = MessageBox::getButtons();
 
 		for (uint8_t i = 0; i < buttons.size(); i++)
 		{
@@ -229,23 +198,31 @@ void AccountsPageState::onMouseButtonPressed()
 			{
 				switch (i)
 				{
-				case Notify_DeleteAccount::CONFERMA:
+				case MessageBox::Buttons::OK:
+					if (buttons[i].isCursorOn(*g_Window))
+					{
+						MessageBox::stop();
+					}
+					break;
+				case MessageBox::Buttons::SI:
 				{
 					mINI::INIStructure ini;
 					DATAFILE.read(ini);
 
-					ini.remove(m_NotifyDeleteAccount.getName());
+					ini.remove(*m_AccountDeleteName);
+					m_AccountDeleteName = NULL;
 
 					DATAFILE.write(ini);
 
 					init();
+
+					MessageBox::stop();
 				}
 				break;
-				case Notify_DeleteAccount::ANNULLA:
+				case MessageBox::Buttons::NO:
+					MessageBox::stop();
 					break;
 				}
-
-				m_NotifyDeleteAccount.setActive(false);
 			}
 		}
 
@@ -283,13 +260,16 @@ void AccountsPageState::onMouseButtonPressed()
 				{
 				case MOSTRA:
 				{
-					m_NotifyViewAccount = Notify_ViewAccount("Account: " + acc->getAccountInfo().name);
+					std::stringstream message;
+					message << "Nome utente:\n" << acc->getAccountInfo().username << "\n\nPassword:\n" << acc->getAccountInfo().password;
 
-					std::stringstream contents;
-					contents << "\nNome utente:\n" << acc->getAccountInfo().username << "\n\nPassword:\n" << acc->getAccountInfo().password;
-					m_NotifyViewAccount.setContents(contents.str());
-
-					m_NotifyViewAccount.setActive(true);
+					MessageBox::showMessage
+					(
+						MessageBox::Type::OK,
+						{ 350.f , 225.f },
+						"Account: " + acc->getAccountInfo().name,
+						message.str()
+					);
 				}
 				break;
 				case MODIFICA:
@@ -297,14 +277,17 @@ void AccountsPageState::onMouseButtonPressed()
 					break;
 				case ELIMINA:
 				{
-					m_NotifyDeleteAccount = Notify_DeleteAccount(acc->getAccountInfo().name);
+					m_AccountDeleteName = &acc->getAccountInfo().name;
 
-					std::stringstream contents;
-					contents << "\nStai per eliminare:\n" << acc->getAccountInfo().name
-						<< "\n\n\n(!) Questa operazione è irreversibile.";
-					m_NotifyDeleteAccount.setContents(contents.str());
-
-					m_NotifyDeleteAccount.setActive(true);
+					std::stringstream message;
+					message << "Stai per eliminare:\n" << acc->getAccountInfo().name << "\n\n(!) Questa operazione è\nirreversibile.";
+					MessageBox::showMessage
+					(
+						MessageBox::Type::YESNO,
+						{ 350.f , 225.f },
+						"Account: " + acc->getAccountInfo().name,
+						message.str()
+					);
 				}
 				break;
 				}

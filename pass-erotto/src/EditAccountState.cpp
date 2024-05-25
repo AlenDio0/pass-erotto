@@ -67,8 +67,13 @@ void EditAccountState::onConfirmButton()
 	}
 	if (info.name == "settings")
 	{
-		m_NotifyBadName = Notify_BadName();
-		m_NotifyBadName.setActive(true);
+		MessageBox::showMessage
+		(
+			MessageBox::Type::OK,
+			{ 300.f, 125.f },
+			"Nome non usabile",
+			"Non è possibile usare quel\nnome!"
+		);
 
 		return;
 	}

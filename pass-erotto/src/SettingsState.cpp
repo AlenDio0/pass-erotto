@@ -70,14 +70,9 @@ void SettingsState::render()
 		m_Buttons[i].render(g_Window);
 	}
 
-	if (m_NotifyReset.isActive())
+	if (MessageBox::isActive())
 	{
-		m_NotifyReset.render(g_Window);
-	}
-
-	if (m_NotifyClose.isActive())
-	{
-		m_NotifyClose.render(g_Window);
+		MessageBox::render(g_Window);
 	}
 
 	g_Window->display();
@@ -85,9 +80,9 @@ void SettingsState::render()
 
 void SettingsState::onMouseMovement()
 {
-	if (m_NotifyReset.isActive())
+	if (MessageBox::isActive())
 	{
-		auto& buttons = m_NotifyReset.getButtons();
+		auto& buttons = MessageBox::getButtons();
 
 		for (uint8_t i = 0; i < buttons.size(); i++)
 		{
@@ -100,22 +95,6 @@ void SettingsState::onMouseMovement()
 			{
 				button.setHighlight(false);
 			}
-		}
-
-		return;
-	}
-
-	if (m_NotifyClose.isActive())
-	{
-		TextButton& button = m_NotifyClose.getButtons()[Notify_Close::OK];
-
-		if (button.isCursorOn(*g_Window))
-		{
-			button.setHighlight(true);
-		}
-		else
-		{
-			button.setHighlight(false);
 		}
 
 		return;
@@ -136,9 +115,9 @@ void SettingsState::onMouseMovement()
 
 void SettingsState::onMouseButtonPressed()
 {
-	if (m_NotifyReset.isActive())
+	if (MessageBox::isActive())
 	{
-		auto& buttons = m_NotifyReset.getButtons();
+		auto& buttons = MessageBox::getButtons();
 
 		for (uint8_t i = 0; i < buttons.size(); i++)
 		{
@@ -146,32 +125,30 @@ void SettingsState::onMouseButtonPressed()
 			{
 				switch (i)
 				{
-				case Notify_Reset::CONFERMA:
+				case MessageBox::Buttons::SI:
 				{
 					mINI::INIStructure ini;
 
 					DATAFILE.generate(ini);
 
-					m_NotifyClose = Notify_Close();
-					m_NotifyClose.setActive(true);
+					MessageBox::stop();
+					MessageBox::showMessage
+					(
+						MessageBox::Type::OK,
+						{ 350.f, 200.f },
+						"RESET - Chiusura programma",
+						"Il RESET è stato terminato:\n\nRichiesto riavvio, premendo Ok\nsi chiuderà il programma."
+					);
 				}
 				break;
-				case Notify_Reset::ANNULLA:
+				case MessageBox::Buttons::NO:
+					MessageBox::stop();
+					break;
+				case MessageBox::Buttons::OK:
+					g_Machine.remove();
 					break;
 				}
-
-				m_NotifyReset.setActive(false);
 			}
-		}
-
-		return;
-	}
-
-	if (m_NotifyClose.isActive())
-	{
-		if (m_NotifyClose.getButtons()[Notify_Close::OK].isCursorOn(*g_Window))
-		{
-			g_Window->close();
 		}
 
 		return;
@@ -187,8 +164,13 @@ void SettingsState::onMouseButtonPressed()
 				g_Machine.add(StateRef(new CreatePINState()), false);
 				break;
 			case Button::RESET:
-				m_NotifyReset = Notify_Reset();
-				m_NotifyReset.setActive(true);
+				MessageBox::showMessage
+				(
+					MessageBox::Type::YESNO,
+					{ 350.f, 200.f },
+					"RESET - Sei sicuro?",
+					"Stai per eliminare tutti i dati.\n\n(!) Questa operazione è\nirreversibile."
+				);
 				break;
 			case Button::INDIETRO:
 				g_Machine.remove();

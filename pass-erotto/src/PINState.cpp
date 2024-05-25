@@ -83,9 +83,9 @@ void PINState::render()
 
 	m_ButtonConfirm.render(g_Window);
 
-	if (m_NotifyWrongPIN.isActive())
+	if (MessageBox::isActive())
 	{
-		m_NotifyWrongPIN.render(g_Window);
+		MessageBox::render(g_Window);
 	}
 
 	g_Window->display();
@@ -93,9 +93,9 @@ void PINState::render()
 
 void PINState::onMouseMovement()
 {
-	if (m_NotifyWrongPIN.isActive())
+	if (MessageBox::isActive())
 	{
-		TextButton& button = m_NotifyWrongPIN.getButtons()[Notify_WrongPIN::OK];
+		TextButton& button = MessageBox::getButtons()[MessageBox::Buttons::OK];
 
 		if (button.isCursorOn(*g_Window))
 		{
@@ -121,11 +121,11 @@ void PINState::onMouseMovement()
 
 void PINState::onMouseButtonPressed()
 {
-	if (m_NotifyWrongPIN.isActive())
+	if (MessageBox::isActive())
 	{
-		if (m_NotifyWrongPIN.getButtons()[Notify_WrongPIN::OK].isCursorOn(*g_Window))
+		if (MessageBox::getButtons()[MessageBox::Buttons::OK].isCursorOn(*g_Window))
 		{
-			m_NotifyWrongPIN.setActive(false);
+			MessageBox::stop();
 		}
 
 		return;
@@ -148,8 +148,13 @@ void PINState::onMouseButtonPressed()
 		}
 		else
 		{
-			m_NotifyWrongPIN = Notify_WrongPIN();
-			m_NotifyWrongPIN.setActive(true);
+			MessageBox::showMessage
+			(
+				MessageBox::Type::OK,
+				{ 200, 100.f },
+				"PIN errato",
+				""
+			);
 		}
 	}
 }
