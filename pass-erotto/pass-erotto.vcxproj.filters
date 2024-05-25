@@ -39,7 +39,7 @@
     <ClCompile Include="src\AddAccountState.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Notify.cpp">
+    <ClCompile Include="src\MessageBox.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="src\EditAccountState.cpp">
@@ -74,7 +74,7 @@
     <ClInclude Include="src\AddAccountState.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="src\Notify.h">
+    <ClInclude Include="src\MessageBox.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="src\AccountInfo.h">

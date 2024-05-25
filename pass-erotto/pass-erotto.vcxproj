@@ -142,7 +142,7 @@
     <ClCompile Include="src\SettingsState.cpp" />
     <ClCompile Include="src\CreatePINState.cpp" />
     <ClCompile Include="src\EditAccountState.cpp" />
-    <ClCompile Include="src\Notify.cpp" />
+    <ClCompile Include="src\MessageBox.cpp" />
     <ClCompile Include="src\AddAccountState.cpp" />
     <ClCompile Include="src\AccountsPageState.cpp" />
     <ClCompile Include="src\MainMenuState.cpp" />
@@ -162,7 +162,7 @@
     <ClInclude Include="src\CreatePINState.h" />
     <ClInclude Include="src\AccountInfo.h" />
     <ClInclude Include="src\EditAccountState.h" />
-    <ClInclude Include="src\Notify.h" />
+    <ClInclude Include="src\MessageBox.h" />
     <ClInclude Include="src\AddAccountState.h" />
     <ClInclude Include="src\AccountsPageState.h" />
     <ClInclude Include="src\MainMenuState.h" />
