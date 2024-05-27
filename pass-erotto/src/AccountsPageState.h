@@ -2,6 +2,7 @@
 #include "State.h"
 
 #include "Data.h"
+#include "Style.h"
 
 #include <vector>
 #include <unordered_map>
@@ -138,8 +139,10 @@ private:
 
 	void onScrollPage(const sf::Event& event);
 
+	void updateSearch();
 	void onSearch(const std::string& search);
 
 	void loadAccounts();
+	void setAccountsInPosition();
 };
 

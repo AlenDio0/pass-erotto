@@ -6,46 +6,52 @@ AddAccountState::AddAccountState()
 {
 	srand((unsigned)time(NULL));
 
-	const uint8_t CHAR_SIZE1 = 25u, CHAR_SIZE2 = 20u;
-	const float X_AXISPOS = WINDOW_WIDTH / 2.f, Y_POS = 125.f;
-	const float Y_SPACING = 100.f;
+	const uint16_t TEXT_SIZE = Style::CharSize::Medium - 5;
+	const float POS_Y = 125.f;
+	const float SPACING = 100.f;
 
-	m_Texts[Box::NOME] = sf::Text("Nome:", *WINDOW_FONT, CHAR_SIZE1);
-	m_TextBoxes[Box::NOME] = TextBox(*WINDOW_FONT, CHAR_SIZE2, sf::Color::Black, 16u);
-	m_TextBoxes[Box::NOME].setPlaceHolder("Nome (Gmail Lavoro, ...)");
+	m_Texts[NOME] = sf::Text("Nome:", *WINDOW_FONT, TEXT_SIZE);
+	m_Texts[NOMEUTENTE] = sf::Text("Nome utente:", *WINDOW_FONT, TEXT_SIZE);
+	m_Texts[PASSWORD] = sf::Text("Password:", *WINDOW_FONT, TEXT_SIZE);
 
-	m_Texts[Box::NOMEUTENTE] = sf::Text("Nome utente:", *WINDOW_FONT, CHAR_SIZE1);
-	m_TextBoxes[Box::NOMEUTENTE] = TextBox(*WINDOW_FONT, CHAR_SIZE2 - 2u, sf::Color::Black, 20u);
-	m_TextBoxes[Box::NOMEUTENTE].setPlaceHolder("Nome utente (nome@gmail.com, ...)");
+	m_TextBoxes[NOME] = TextBox(*WINDOW_FONT, Style::CharSize::Small, sf::Color::Black, 16u);
+	m_TextBoxes[NOMEUTENTE] = TextBox(*WINDOW_FONT, Style::CharSize::Small - 2, sf::Color::Black, 20u);
+	m_TextBoxes[PASSWORD] = TextBox(*WINDOW_FONT, Style::CharSize::Small, sf::Color::Black, 16u);
 
-	m_Texts[Box::PASSWORD] = sf::Text("Password:", *WINDOW_FONT, CHAR_SIZE1);
-	m_TextBoxes[Box::PASSWORD] = TextBox(*WINDOW_FONT, CHAR_SIZE2, sf::Color::Black, 16u);
-	m_TextBoxes[Box::PASSWORD].setPlaceHolder("Password");
+	m_TextBoxes[NOME].setPlaceHolder("Nome (Gmail Lavoro, ...)");
+	m_TextBoxes[NOMEUTENTE].setPlaceHolder("Nome utente (nome@gmail.com, ...)");
+	m_TextBoxes[PASSWORD].setPlaceHolder("Password");
 
 	for (uint8_t i = 0; i < m_TextBoxes.size(); i++)
 	{
-		m_TextBoxes[i].setPosition({ X_AXISPOS - m_TextBoxes[i].getBackground().getSize().x / 2.f, Y_POS + Y_SPACING * i });
-		m_Texts[i].setPosition({ X_AXISPOS - m_Texts[i].getGlobalBounds().getSize().x / 2.f, Y_POS + Y_SPACING * i - m_TextBoxes[i].getBackground().getGlobalBounds().getSize().y });
+		m_TextBoxes[i].setPosition({ Style::WINDOW_AXIS - (m_TextBoxes[i].getSize().x / 2.f), POS_Y + (SPACING * i) });
+
+		m_Texts[i].setPosition
+		({
+			Style::WINDOW_AXIS - (m_Texts[i].getGlobalBounds().getSize().x / 2.f),
+			POS_Y + (SPACING * i) - m_TextBoxes[i].getSize().y - 5.f
+			});
 		m_Texts[i].setOutlineThickness(2.f);
 	}
 
-	m_Buttons[Button::GENERA] = TextButton(*WINDOW_FONT, "Genera Password", 20u);
-	m_Buttons[Button::GENERA].setPosition
+	m_Buttons[GENERA] = TextButton(*WINDOW_FONT, "Genera Password", Style::CharSize::Small);
+	m_Buttons[CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", Style::CharSize::Medium);
+	m_Buttons[ANNULLA] = TextButton(*WINDOW_FONT, "Annulla", Style::CharSize::Medium);
+
+	m_Buttons[GENERA].setPosition
 	({
-		X_AXISPOS - m_Buttons[Button::GENERA].getBackground().getSize().x / 2.f,
-		m_TextBoxes[Box::PASSWORD].getBackground().getPosition().y + m_TextBoxes[Box::PASSWORD].getBackground().getSize().y + 20.f
+		Style::WINDOW_AXIS - (m_Buttons[GENERA].getSize().x / 2.f),
+		m_TextBoxes[PASSWORD].getBackground().getPosition().y + m_TextBoxes[PASSWORD].getSize().y + Style::WINDOW_OFFSET
 		});
-	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", 30u);
-	m_Buttons[Button::CONFERMA].setPosition
+	m_Buttons[CONFERMA].setPosition
 	({
-		X_AXISPOS * 1.5f - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().x / 2.f,
-		WINDOW_HEIGTH - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().y - 50.f
+		(Style::WINDOW_AXIS * 1.5f) - (m_Buttons[CONFERMA].getSize().x / 2.f),
+		WINDOW_HEIGTH - m_Buttons[CONFERMA].getSize().y - 50.f
 		});
-	m_Buttons[Button::ANNULLA] = TextButton(*WINDOW_FONT, "Annulla", 30u);
-	m_Buttons[Button::ANNULLA].setPosition
+	m_Buttons[ANNULLA].setPosition
 	({
-		X_AXISPOS / 2.f - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().x / 2.f,
-		WINDOW_HEIGTH - m_Buttons[Button::ANNULLA].getBackground().getGlobalBounds().getSize().y - 50.f
+		(Style::WINDOW_AXIS / 2.f) - (m_Buttons[ANNULLA].getSize().x / 2.f),
+		WINDOW_HEIGTH - m_Buttons[ANNULLA].getSize().y - 50.f
 		});
 }
 
@@ -171,13 +177,13 @@ void AddAccountState::onMouseButtonPressed()
 		{
 			switch (i)
 			{
-			case Button::GENERA:
+			case GENERA:
 				onGenerateButton();
 				break;
-			case Button::CONFERMA:
+			case CONFERMA:
 				onConfirmButton();
 				break;
-			case Button::ANNULLA:
+			case ANNULLA:
 				g_Machine.remove();
 				break;
 			}
@@ -197,15 +203,15 @@ void AddAccountState::onGenerateButton()
 		new_password.push_back(c);
 	}
 
-	m_TextBoxes[Box::PASSWORD].setString(new_password);
-	m_TextBoxes[Box::PASSWORD].setSelected(true);
+	m_TextBoxes[PASSWORD].setString(new_password);
+	m_TextBoxes[PASSWORD].setSelected(true);
 }
 
 void AddAccountState::onConfirmButton()
 {
-	std::string nome = m_TextBoxes[Box::NOME].getBuff();
-	const std::string& nomeutente = m_TextBoxes[Box::NOMEUTENTE].getBuff();
-	const std::string& password = m_TextBoxes[Box::PASSWORD].getBuff();
+	std::string nome = m_TextBoxes[NOME].getBuff();
+	const std::string& nomeutente = m_TextBoxes[NOMEUTENTE].getBuff();
+	const std::string& password = m_TextBoxes[PASSWORD].getBuff();
 
 	if (nome.empty() || nomeutente.empty() || password.empty())
 	{

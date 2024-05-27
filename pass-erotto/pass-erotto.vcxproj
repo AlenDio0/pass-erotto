@@ -168,6 +168,7 @@
     <ClInclude Include="src\MainMenuState.h" />
     <ClInclude Include="src\PINState.h" />
     <ClInclude Include="src\Data.h" />
+    <ClInclude Include="src\Style.h" />
     <ClInclude Include="src\TextBox.h" />
     <ClInclude Include="src\TextButton.h" />
   </ItemGroup>

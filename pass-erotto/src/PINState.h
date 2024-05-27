@@ -1,9 +1,10 @@
 #pragma once
 #include "State.h"
 
-#include <fstream>
 #include "Data.h"
+#include "Style.h"
 
+#include <fstream>
 #include "TextBox.h"
 #include "TextButton.h"
 #include "MessageBox.h"

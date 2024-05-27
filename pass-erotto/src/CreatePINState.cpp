@@ -4,28 +4,27 @@ using namespace Data;
 
 CreatePINState::CreatePINState()
 {
-	const uint8_t CHAR_SIZE = 40u;
-	const float X_AXISPOS = WINDOW_WIDTH / 2.f, Y_POS = WINDOW_HEIGTH / 6.f;
+	const float POS_Y = WINDOW_HEIGTH / 6.f;
 
-	m_TextBoxPIN = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 16u);
+	m_TextBoxPIN = TextBox(*WINDOW_FONT, Style::CharSize::Small, sf::Color::Black, 16u);
+	m_TextInsertPIN = sf::Text("Crea il nuovo PIN:", *WINDOW_FONT, Style::CharSize::Medium);
+
 	m_TextBoxPIN.setPosition
 	({
-		X_AXISPOS - m_TextBoxPIN.getBackground().getSize().x / 2.f,
-		Y_POS + m_TextBoxPIN.getBackground().getSize().y * 2.f
+		Style::WINDOW_AXIS - m_TextBoxPIN.getBackground().getSize().x / 2.f,
+		POS_Y + m_TextBoxPIN.getBackground().getSize().y * 2.f
 		});
 	m_TextBoxPIN.setPlaceHolder("Nuovo PIN");
 
-	m_TextInsertPIN = sf::Text("Crea il nuovo PIN:", *WINDOW_FONT, 30u);
-	m_TextInsertPIN.setPosition({ m_TextBoxPIN.getBackground().getPosition().x, Y_POS });
+	m_TextInsertPIN.setPosition({ m_TextBoxPIN.getBackground().getPosition().x, POS_Y });
 	m_TextInsertPIN.setStyle(sf::Text::Bold);
 	m_TextInsertPIN.setOutlineThickness(2.f);
 
-	m_Buttons[Button::ANNULLA] = TextButton(*WINDOW_FONT, "< Annulla", 25u);
-	m_Buttons[Button::ANNULLA].setPosition({ 25.f, 25.f });
+	m_Buttons[ANNULLA] = TextButton(*WINDOW_FONT, "< Annulla", Style::CharSize::Medium);
+	m_Buttons[CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", Style::CharSize::Large);
 
-	m_Buttons[Button::CONFERMA] = TextButton(*WINDOW_FONT, "Conferma", CHAR_SIZE);
-	m_Buttons[Button::CONFERMA].setPosition
-	({ X_AXISPOS - m_Buttons[Button::CONFERMA].getBackground().getGlobalBounds().getSize().x / 2.f, WINDOW_HEIGTH / 1.5f });
+	m_Buttons[ANNULLA].setPosition({ Style::WINDOW_OFFSET, Style::WINDOW_OFFSET });
+	m_Buttons[CONFERMA].setPosition({ Style::WINDOW_AXIS - (m_Buttons[CONFERMA].getSize().x / 2.f), WINDOW_HEIGTH / 1.5f });
 }
 
 void CreatePINState::init()
@@ -99,7 +98,7 @@ void CreatePINState::onMouseButtonPressed()
 		{
 			switch (i)
 			{
-			case Button::CONFERMA:
+			case CONFERMA:
 				if (m_TextBoxPIN.getBuff().empty())
 				{
 					m_TextBoxPIN.getBackground().setOutlineColor(sf::Color::Red);
@@ -117,7 +116,7 @@ void CreatePINState::onMouseButtonPressed()
 					g_Machine.remove();
 				}
 				break;
-			case Button::ANNULLA:
+			case ANNULLA:
 				g_Machine.remove();
 				break;
 			}

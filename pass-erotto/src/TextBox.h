@@ -10,6 +10,8 @@ public:
 
 	sf::Text& getText();
 	sf::RectangleShape& getBackground();
+
+	const sf::Vector2f& getSize() const;
 	const std::string getBuff() const;
 
 	void setPosition(const sf::Vector2f& position);

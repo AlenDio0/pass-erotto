@@ -2,6 +2,7 @@
 #include "State.h"
 
 #include "Data.h"
+#include "Style.h"
 
 #include <time.h>
 #include <unordered_map>

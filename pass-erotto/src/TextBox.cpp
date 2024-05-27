@@ -26,6 +26,11 @@ sf::RectangleShape& TextBox::getBackground()
 	return m_Background;
 }
 
+const sf::Vector2f& TextBox::getSize() const
+{
+	return m_Background.getSize();
+}
+
 const std::string TextBox::getBuff() const
 {
 	return m_Buff.str();

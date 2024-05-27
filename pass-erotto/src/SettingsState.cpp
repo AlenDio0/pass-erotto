@@ -7,30 +7,24 @@ using namespace Data;
 
 SettingsState::SettingsState()
 {
-	const uint8_t CHAR_SIZE1 = 40u, CHAR_SIZE2 = 25u;
-	const float X_AXIS = WINDOW_WIDTH / 2.f, Y_POS = 150.f;
-	const float Y_SPACING = 50.f;
+	const float POS_Y = 150.f;
+	const float SPACING = 50.f;
 
-	m_Buttons[Button::CAMBIAPIN] = TextButton(*WINDOW_FONT, "Cambia PIN", CHAR_SIZE1);
-	m_Buttons[Button::CAMBIAPIN].setPosition
-	({
-		X_AXIS - m_Buttons[Button::CAMBIAPIN].getBackground().getSize().x / 2.f,
-		Y_POS
-		});
+	m_Buttons[CAMBIAPIN] = TextButton(*WINDOW_FONT, "Cambia PIN", Style::CharSize::Large);
+	m_Buttons[RESET] = TextButton(*WINDOW_FONT, "RESET", Style::CharSize::Large);
+	m_Buttons[INDIETRO] = TextButton(*WINDOW_FONT, "< Indietro", Style::CharSize::Medium);
 
-	m_Buttons[Button::RESET] = TextButton(*WINDOW_FONT, "RESET", CHAR_SIZE1);
-	m_Buttons[Button::RESET].setPosition
+	m_Buttons[CAMBIAPIN].setPosition
 	({
-		X_AXIS - m_Buttons[Button::RESET].getBackground().getSize().x / 2.f,
-		Y_POS + m_Buttons[Button::RESET].getBackground().getSize().y + Y_SPACING
+		Style::WINDOW_AXIS - (m_Buttons[CAMBIAPIN].getSize().x / 2.f),
+		POS_Y
 		});
-
-	m_Buttons[Button::INDIETRO] = TextButton(*WINDOW_FONT, "< Indietro", CHAR_SIZE2);
-	m_Buttons[Button::INDIETRO].setPosition
+	m_Buttons[RESET].setPosition
 	({
-		25.f,
-		25.f
+		Style::WINDOW_AXIS - (m_Buttons[RESET].getSize().x / 2.f),
+		POS_Y + m_Buttons[RESET].getSize().y + SPACING
 		});
+	m_Buttons[INDIETRO].setPosition({ Style::WINDOW_OFFSET,Style::WINDOW_OFFSET });
 }
 
 void SettingsState::init()
@@ -160,10 +154,10 @@ void SettingsState::onMouseButtonPressed()
 		{
 			switch (i)
 			{
-			case Button::CAMBIAPIN:
+			case CAMBIAPIN:
 				g_Machine.add(StateRef(new CreatePINState()), false);
 				break;
-			case Button::RESET:
+			case RESET:
 				MessageBox::showMessage
 				(
 					MessageBox::Type::YESNO,
@@ -172,7 +166,7 @@ void SettingsState::onMouseButtonPressed()
 					"Stai per eliminare tutti i dati.\n\n(!) Questa operazione è\nirreversibile."
 				);
 				break;
-			case Button::INDIETRO:
+			case INDIETRO:
 				g_Machine.remove();
 				break;
 			}

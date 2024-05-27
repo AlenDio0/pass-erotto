@@ -7,23 +7,23 @@ using namespace Data;
 
 MainMenuState::MainMenuState()
 {
-	const uint8_t CHAR_SIZE1 = 50u, CHAR_SIZE2 = 30u;
 	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
-	const float Y_POS = 175.f, Y_SPACING = 100.f;
+	const float POS_Y = 175.f, SPACING = 100.f;
 
-	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, CHAR_SIZE1);
+	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, Style::CharSize::Large);
+
 	m_TextTitle.setPosition(floor(X_AXISPOS - m_TextTitle.getGlobalBounds().getSize().x / 2.f), 50.f);
 	m_TextTitle.setOutlineThickness(2.f);
 	m_TextTitle.setOutlineColor(sf::Color::Black);
 
-	m_Buttons[Button::ACCOUNTS] = TextButton(*WINDOW_FONT, "Accounts", CHAR_SIZE2, sf::Color::Black);
-	m_Buttons[Button::IMPOSTAZIONI] = TextButton(*WINDOW_FONT, "Impostazioni", CHAR_SIZE2, sf::Color::Black);
+	m_Buttons[Button::ACCOUNTS] = TextButton(*WINDOW_FONT, "Accounts", Style::CharSize::Medium, sf::Color::Black);
+	m_Buttons[Button::IMPOSTAZIONI] = TextButton(*WINDOW_FONT, "Impostazioni", Style::CharSize::Medium, sf::Color::Black);
 	//m_Buttons[Button::AIUTO] = TextButton(*WINDOW_FONT, "Aiuto", CHAR_SIZE2, sf::Color::Black);
-	m_Buttons[Button::ESCI] = TextButton(*WINDOW_FONT, "Esci", CHAR_SIZE2, sf::Color::Black);
+	m_Buttons[Button::ESCI] = TextButton(*WINDOW_FONT, "Esci", Style::CharSize::Medium, sf::Color::Black);
 
 	for (uint8_t i = 0; i < m_Buttons.size(); i++)
 	{
-		m_Buttons[i].setPosition({ floor(X_AXISPOS - m_Buttons[i].getBackground().getSize().x / 2.f), floor(Y_POS + Y_SPACING * i) });
+		m_Buttons[i].setPosition({ floor(Style::WINDOW_AXIS - m_Buttons[i].getSize().x / 2.f), floor(POS_Y + SPACING * i) });
 	}
 }
 

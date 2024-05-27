@@ -7,25 +7,22 @@ using namespace Data;
 
 PINState::PINState()
 {
-	const uint8_t CHAR_SIZE1 = 35u, CHAR_SIZE2 = 20u;
-	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
-	const float Y_POS = WINDOW_HEIGTH / 6.f;
+	const float POS_Y = WINDOW_HEIGTH / 6.f;
 
-	m_TextBoxPIN = TextBox(*WINDOW_FONT, CHAR_SIZE2, sf::Color::Black, 16u);
-	m_TextBoxPIN.setPosition
-	({
-		X_AXISPOS - m_TextBoxPIN.getBackground().getSize().x / 2.f,
-		Y_POS + m_TextBoxPIN.getBackground().getSize().y * 2.f
-		});
+	m_TextBoxPIN = TextBox(*WINDOW_FONT, Style::CharSize::Small, sf::Color::Black, 16u);
+
+	m_TextBoxPIN.setPosition({ Style::WINDOW_AXIS - (m_TextBoxPIN.getSize().x / 2.f), POS_Y + (m_TextBoxPIN.getSize().y * 2.f) });
 	m_TextBoxPIN.setPlaceHolder("PIN");
 
-	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, CHAR_SIZE1);
-	m_TextInsertPIN.setPosition({ m_TextBoxPIN.getBackground().getPosition().x, Y_POS });
+	m_TextInsertPIN = sf::Text("Inserisci il PIN:", *WINDOW_FONT, Style::CharSize::Medium);
+
+	m_TextInsertPIN.setPosition({ m_TextBoxPIN.getBackground().getPosition().x, POS_Y });
 	m_TextInsertPIN.setStyle(sf::Text::Bold);
 	m_TextInsertPIN.setOutlineThickness(2.f);
 
-	m_ButtonConfirm = TextButton(*WINDOW_FONT, "Conferma", CHAR_SIZE1, sf::Color::Black);
-	m_ButtonConfirm.setPosition({ X_AXISPOS - m_ButtonConfirm.getBackground().getSize().x / 2.f, WINDOW_HEIGTH / 1.5f });
+	m_ButtonConfirm = TextButton(*WINDOW_FONT, "Conferma", Style::CharSize::Large, sf::Color::Black);
+
+	m_ButtonConfirm.setPosition({ Style::WINDOW_AXIS - (m_ButtonConfirm.getSize().x / 2.f), WINDOW_HEIGTH / 1.5f });
 }
 
 void PINState::init()

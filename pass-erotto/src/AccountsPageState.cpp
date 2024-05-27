@@ -10,33 +10,32 @@ using namespace Data;
 AccountsPageState::AccountsPageState()
 	: m_AccountDeleteName(NULL)
 {
-	const float X_AXISPOS = WINDOW_WIDTH / 2.f;
-	const float X_POS = 10.f, Y_POS = 10.f;
-	const float BACKGROUND_SIZE_Y = 110.f;
+	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, Style::CharSize::Large);
 
-	m_TextTitle = sf::Text("pass-erotto", *WINDOW_FONT, 38u);
-	m_TextTitle.setPosition(X_AXISPOS - m_TextTitle.getGlobalBounds().getSize().x / 2.f, Y_POS / 2.f);
+	m_TextTitle.setPosition(Style::WINDOW_AXIS - m_TextTitle.getGlobalBounds().getSize().x / 2.f, Style::WINDOW_OFFSET / 2.f);
 	m_TextTitle.setOutlineThickness(2.f);
 	m_TextTitle.setOutlineColor(sf::Color::Black);
 
-	m_Background = sf::RectangleShape({ WINDOW_WIDTH, BACKGROUND_SIZE_Y });
+	m_Background = sf::RectangleShape({ WINDOW_WIDTH, 110.f });
+
 	m_Background.setFillColor(sf::Color::Blue);
 	m_Background.setOutlineThickness(4.f);
 	m_Background.setOutlineColor(sf::Color::Black);
 
-	m_TextBoxSearch = TextBox(*WINDOW_FONT, 20u, sf::Color::Black, 14u);
+	m_TextBoxSearch = TextBox(*WINDOW_FONT, Style::CharSize::Small, sf::Color::Black, 14u);
+
 	m_TextBoxSearch.setPosition
 	({
-		X_AXISPOS - m_TextBoxSearch.getBackground().getSize().x / 2.f,
-		BACKGROUND_SIZE_Y - m_TextBoxSearch.getBackground().getSize().y - 10.f
+		Style::WINDOW_AXIS - m_TextBoxSearch.getSize().x / 2.f,
+		m_Background.getSize().y - m_TextBoxSearch.getSize().y - Style::WINDOW_OFFSET
 		});
 	m_TextBoxSearch.setPlaceHolder("Cerca...");
 
-	m_Buttons[Button::AGGIUNGI] = TextButton(*WINDOW_FONT, " + ", 30u, sf::Color::Black);
-	m_Buttons[Button::AGGIUNGI].setPosition({ WINDOW_WIDTH - m_Buttons[Button::AGGIUNGI].getBackground().getSize().x - X_POS, Y_POS });
+	m_Buttons[AGGIUNGI] = TextButton(*WINDOW_FONT, " + ", Style::CharSize::Medium, sf::Color::Black);
+	m_Buttons[INDIETRO] = TextButton(*WINDOW_FONT, " < ", Style::CharSize::Medium, sf::Color::Black);
 
-	m_Buttons[Button::INDIETRO] = TextButton(*WINDOW_FONT, " < ", 30u, sf::Color::Black);
-	m_Buttons[Button::INDIETRO].setPosition({ X_POS, Y_POS });
+	m_Buttons[AGGIUNGI].setPosition({ WINDOW_WIDTH - m_Buttons[AGGIUNGI].getSize().x - Style::WINDOW_OFFSET, Style::WINDOW_OFFSET });
+	m_Buttons[INDIETRO].setPosition({ Style::WINDOW_OFFSET, Style::WINDOW_OFFSET });
 }
 
 void AccountsPageState::init()
@@ -45,10 +44,9 @@ void AccountsPageState::init()
 
 	loadAccounts();
 
-	for (uint16_t i = 0; i < m_Accounts.size(); i++)
-	{
-		m_Accounts[i].setPosition({ ACCOUNT_XPOS(m_Accounts[i].getSize().x), m_Background.getSize().y + 10.f + 110.f * i });
-	}
+	onSearch(m_TextBoxSearch.getBuff());
+
+	setAccountsInPosition();
 }
 
 void AccountsPageState::pollEvent()
@@ -80,36 +78,7 @@ void AccountsPageState::update()
 {
 	m_TextBoxSearch.update();
 
-	static std::string search;
-	if (!m_TextBoxSearch.getBuff().empty())
-	{
-		if (search != m_TextBoxSearch.getBuff())
-		{
-			search = m_TextBoxSearch.getBuff();
-			for (char& c : search)
-			{
-				c += c < 'A' || c > 'Z' ? 0 : 32;
-			}
-
-			onSearch(search);
-		}
-	}
-	else if (m_VisibleAccounts.size() != m_Accounts.size())
-	{
-		search = "";
-
-		m_VisibleAccounts.clear();
-		for (Account& acc : m_Accounts)
-		{
-			m_VisibleAccounts.push_back(&acc);
-		}
-
-		for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
-		{
-			m_VisibleAccounts[i]->setPosition({ ACCOUNT_XPOS(m_Accounts[i].getSize().x), m_Background.getSize().y + 10.f + 110.f * i });
-		}
-	}
-
+	updateSearch();
 }
 
 void AccountsPageState::render()
@@ -163,8 +132,8 @@ void AccountsPageState::onMouseMovement()
 
 	std::vector<TextButton*> buttons;
 
-	buttons.push_back(&m_Buttons[Button::AGGIUNGI]);
-	buttons.push_back(&m_Buttons[Button::INDIETRO]);
+	buttons.push_back(&m_Buttons[AGGIUNGI]);
+	buttons.push_back(&m_Buttons[INDIETRO]);
 
 	for (Account& acc : m_Accounts)
 	{
@@ -301,10 +270,10 @@ void AccountsPageState::onMouseButtonPressed()
 		{
 			switch (i)
 			{
-			case Button::AGGIUNGI:
+			case AGGIUNGI:
 				g_Machine.add(StateRef(new AddAccountState()), false);
 				break;
-			case Button::INDIETRO:
+			case INDIETRO:
 				g_Machine.remove();
 				break;
 			}
@@ -321,17 +290,24 @@ void AccountsPageState::onScrollPage(const sf::Event& event)
 
 	const float DELTA = event.mouseWheelScroll.delta;
 
-	const int Y_MOVE = 55;
+	const int MOVE = 55;
+
+	auto DEFAULT = [&](const uint16_t& i) -> float
+		{
+			return m_Background.getSize().y + Style::WINDOW_OFFSET + m_VisibleAccounts[i]->getSize().y * i;
+		};
 
 	if (DELTA > 0.f)
 	{
 		for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
 		{
-			const float Y_DEFAULT = m_Background.getSize().y + 10.f + 110.f * i;
-
-			if (m_VisibleAccounts[i]->getPosition().y != Y_DEFAULT)
+			if (m_VisibleAccounts[i]->getPosition().y != DEFAULT(i))
 			{
-				m_VisibleAccounts[i]->setPosition({ ACCOUNT_XPOS(m_Accounts[i].getSize().x), m_VisibleAccounts[i]->getPosition().y + Y_MOVE });
+				m_VisibleAccounts[i]->setPosition
+				({
+					ACCOUNT_XPOS(m_Accounts[i].getSize().x),
+					m_VisibleAccounts[i]->getPosition().y + MOVE
+					});
 			}
 		}
 	}
@@ -339,13 +315,45 @@ void AccountsPageState::onScrollPage(const sf::Event& event)
 	{
 		for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
 		{
-			const float Y_DEFAULT = m_Background.getSize().y + 10.f + 110.f * i;
-
-			if (m_VisibleAccounts[i]->getPosition().y <= Y_DEFAULT)
+			if (m_VisibleAccounts[i]->getPosition().y <= DEFAULT(i))
 			{
-				m_VisibleAccounts[i]->setPosition({ ACCOUNT_XPOS(m_Accounts[i].getSize().x), m_VisibleAccounts[i]->getPosition().y - Y_MOVE });
+				m_VisibleAccounts[i]->setPosition
+				({
+					ACCOUNT_XPOS(m_Accounts[i].getSize().x),
+					m_VisibleAccounts[i]->getPosition().y - MOVE
+					});
 			}
 		}
+	}
+}
+
+void AccountsPageState::updateSearch()
+{
+	static std::string search;
+	if (!m_TextBoxSearch.getBuff().empty())
+	{
+		if (search != m_TextBoxSearch.getBuff())
+		{
+			search = m_TextBoxSearch.getBuff();
+			for (char& c : search)
+			{
+				c += c < 'A' || c > 'Z' ? 0 : 32;
+			}
+
+			onSearch(search);
+		}
+	}
+	else if (m_VisibleAccounts.size() != m_Accounts.size())
+	{
+		search = "";
+
+		m_VisibleAccounts.clear();
+		for (Account& acc : m_Accounts)
+		{
+			m_VisibleAccounts.push_back(&acc);
+		}
+
+		setAccountsInPosition();
 	}
 }
 
@@ -378,10 +386,7 @@ void AccountsPageState::onSearch(const std::string& search)
 		}
 	}
 
-	for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
-	{
-		m_VisibleAccounts[i]->setPosition({ ACCOUNT_XPOS(m_Accounts[i].getSize().x), m_Background.getSize().y + 10.f + 110.f * i });
-	}
+	setAccountsInPosition();
 }
 
 void AccountsPageState::loadAccounts()
@@ -419,5 +424,17 @@ void AccountsPageState::loadAccounts()
 			}
 		}
 		m_Accounts.push_back(account);
+	}
+}
+
+void AccountsPageState::setAccountsInPosition()
+{
+	for (uint16_t i = 0; i < m_VisibleAccounts.size(); i++)
+	{
+		m_VisibleAccounts[i]->setPosition
+		({
+			ACCOUNT_XPOS(m_VisibleAccounts[i]->getSize().x),
+			m_Background.getSize().y + Style::WINDOW_OFFSET + m_VisibleAccounts[i]->getSize().y * i
+			});
 	}
 }

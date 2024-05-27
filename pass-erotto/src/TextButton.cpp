@@ -32,6 +32,11 @@ sf::RectangleShape& TextButton::getBackground()
 	return m_Background;
 }
 
+const sf::Vector2f& TextButton::getSize() const
+{
+	return m_Background.getSize();
+}
+
 void TextButton::setPosition(const sf::Vector2f& position)
 {
 	m_Background.setPosition(position);
